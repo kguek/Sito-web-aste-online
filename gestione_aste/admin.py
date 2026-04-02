@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Asta, Offerta
 
-# Register your models here.
+admin.site.register(Asta)
+admin.site.register(Offerta)
+
