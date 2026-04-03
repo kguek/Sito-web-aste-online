@@ -8,23 +8,24 @@
 <img src="{{object.immagine.url}}" alt="{{object.titolo}}" style="max-width: 300px;">
 {% endif %}
 <p><strong>Descrizione:</strong> {{object.descrizione}}</p>
-<p><strong>Prezzo Partenza:</strong> {{object.prezzo_iniziale}} €</p>
+<p><strong>Prezzo Attuale:</strong> <span id="prezzo-live">{{ object.prezzo_iniziale }}</span> €</p>
 <p><strong>Scadenza:</strong> {{object.data_scadenza}}</p>
 
 <hr>
 <h3>Offerte Attuali</h3>
-<ul>
-    {% for offerta in object.offerte.all|dictsortreversed:'importo' %}
-    <li> <strong>{{offerta.importo}} €</strong> - {{offerta.offerente.username}}</li>
+<ul id="lista-offerte">
+    {% for offerta in object.offerte.all|dictsortreversed:"importo" %}
+    <li><strong>{{ offerta.importo }} €</strong> - offerti da {{ offerta.offerente.username }} il {{
+        offerta.data_offerta|date:"d/m/Y H:i" }}</li>
     {% empty %}
-    <li>Nessuna offerta ancora presente</li>
+    <li>Nessuna offerta ancora. Sii il primo!</li>
     {% endfor %}
 </ul>
 
 <hr>
 {% if request.user.is_authenticated and request.user.id != object.creatore.id %}
 <h4>Fai la tua offerta</h4>
-
+<p><small>Offerta minima accettata: <span id="minimo-richiesto">...</span> €</small></p>
 <form action="{%url 'fai_offerta' object.pk %}" method="post">
     {% csrf_token %}
     {{form_offerta.as_p}}
@@ -35,5 +36,38 @@
 {% else %}
 <p><em>Devi essere loggato per fare offerte</em></p>
 {% endif %}
+
+<script>
+    function aggiornaPrezzo() {
+        const url = "{% url 'api_max_offerta' object.pk %}";
+        const xhttp = new XMLHttpRequest();
+
+        xhttp.onload = function () {
+            if (this.status === 200) {
+                const risposta = JSON.parse(this.responseText);
+                document.getElementById('prezzo-live').innerHTML = risposta.importo + " (Offerta di: " + risposta.offerente + ")";
+
+                let listaHTML = "";
+                if (risposta.storico.length > 0) {
+                    for (let i = 0; i < risposta.storico.length; i++) {
+                        listaHTML += "<li><strong>" + risposta.storico[i].importo + " €</strong> - offerti da " + risposta.storico[i].offerente + " il " + risposta.storico[i].data + "</li>";
+                    }
+                } else {
+                    listaHTML = "<li>Nessuna offerta!</li>";
+                }
+                document.getElementById('lista-offerte').innerHTML = listaHTML;
+
+                const minElement = document.getElementById('minimo-richiesto');
+                if (minElement) {
+                    minElement.innerHTML = risposta.minimo_richiesto;
+                }
+            }
+        }
+        xhttp.open('GET', url);
+        xhttp.send();
+    }
+    setInterval(aggiornaPrezzo, 3000);
+    aggiornaPrezzo();
+</script>
 
 {% endblock %}

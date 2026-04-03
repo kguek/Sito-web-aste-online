@@ -7,4 +7,5 @@ urlpatterns = [
     path('asta-nuova/', views.AstaCreateView.as_view(), name='asta-nuova'),   
     path('asta/<int:pk>/', views.AstaDetailView.as_view(), name='dettaglio_asta'),   
     path('asta/<int:pk>/offri/', views.OffertaCreateView.as_view(), name='fai_offerta'),
+    path('api/asta/<int:pk>/max-offerta/', views.api_max_offerta, name='api_max_offerta'),
 ]

@@ -3,8 +3,9 @@ from django.urls import reverse_lazy,reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.http import JsonResponse
 
 
 class RegistrazioneView(CreateView):
@@ -80,6 +81,34 @@ class OffertaCreateView(LoginRequiredMixin, CreateView):
      def get_success_url(self):
           return reverse('dettaglio_asta', kwargs={'pk':self.kwargs['pk']})
           
+def api_max_offerta(request, pk):
+     asta=get_object_or_404(Asta, pk=pk)
+     offerte=asta.offerte.order_by('-importo')
+     
+     storico=[]
+     for off in offerte:
+          storico.append({
+               'importo':str(off.importo),
+               'offerente':off.offerente.username,
+               'data':off.data_offerta.strftime('%d/%m/%Y %H:%M')
+          })
+
+     if offerte.exists():
+          offerta_massima=offerte.first()
+          dati={
+               'importo': str(offerta_massima.importo),
+               'offerente': offerta_massima.offerente.username,
+               'minimo_richiesto': str(offerta_massima.importo + 1),
+               'storico':storico,
+          }
+     else:
+          dati={
+               'importo': str(asta.prezzo_iniziale),
+               'offerente': 'Nessuna offerta',
+               'minimo_richiesto': str(asta.prezzo_iniziale),
+               'storico': storico,
+          }
+     return JsonResponse(dati)
      
     
     

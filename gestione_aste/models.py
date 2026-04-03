@@ -27,7 +27,7 @@ class Offerta(models.Model):
     asta=models.ForeignKey(Asta, on_delete=models.CASCADE, related_name='offerte')
     offerente=models.ForeignKey(User, on_delete=models.CASCADE, related_name='offerte_create')
     importo=models.DecimalField(max_digits=10, decimal_places=2)
-    data_offerta=models.DateField(auto_now_add=True)
+    data_offerta=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Offerta di {self.importo} per l'asta {self.asta.titolo} da {self.offerente.username}"
