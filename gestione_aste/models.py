@@ -9,7 +9,9 @@ class Asta(models.Model):
     descrizione = models.TextField()
     
     #Creiamo un cartella specifica per le immagini uploadate
-    imagine= models.ImageField(upload_to='immagini_aste/', blank=True, null=True)
+    immagine = models.ImageField(upload_to='immagini_aste/', blank=True, null=True)
+    prezzo_iniziale = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    data_creazione=models.DateTimeField(auto_now_add=True)
     data_scadenza=models.DateTimeField()
     
     #Creiamo un campo per il creatore dell'asta, in questo caso l'utente loggato

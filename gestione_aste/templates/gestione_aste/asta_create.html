@@ -1,0 +1,10 @@
+{% extends 'gestione_aste/base.html' %}
+
+{% block content %}
+<h2>Crea Nuova Asta</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Crea Asta">
+</form>
+{% endblock %}

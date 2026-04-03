@@ -1,0 +1,19 @@
+{% extends 'gestione_aste/base.html' %}
+
+{% block content %}
+<h2>Aste Attive</h2>
+<ul>
+    {% for asta in aste %}
+    <li>
+        <strong>{{asta.titolo}}</strong> <br>
+        Prezzo attuale/base: {{asta.prezzo_iniziale}} € <br>
+        Scade il: {{asta.data_scadenza}} <br>
+        Venditore: {{asta.creatore.username}} <br>
+        <a href="{%url 'dettaglio_asta' asta.pk %}">Vedi Dettagli &rarr;</a>
+    </li>
+    <hr>
+    {% empty %}
+    <li>Nessuna asta attiva al momento.</li>
+    {% endfor %}
+</ul>
+{%endblock%}

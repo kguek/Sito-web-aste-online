@@ -1,0 +1,39 @@
+{% extends "gestione_aste/base.html" %}
+
+{%block content%}
+<h2>{{object.titolo}}</h2>
+<p><strong>Venditore:</strong> {{object.creatore.username}}</p>
+
+{% if object.immagine %}
+<img src="{{object.immagine.url}}" alt="{{object.titolo}}" style="max-width: 300px;">
+{% endif %}
+<p><strong>Descrizione:</strong> {{object.descrizione}}</p>
+<p><strong>Prezzo Partenza:</strong> {{object.prezzo_iniziale}} €</p>
+<p><strong>Scadenza:</strong> {{object.data_scadenza}}</p>
+
+<hr>
+<h3>Offerte Attuali</h3>
+<ul>
+    {% for offerta in object.offerte.all|dictsortreversed:'importo' %}
+    <li> <strong>{{offerta.importo}} €</strong> - {{offerta.offerente.username}}</li>
+    {% empty %}
+    <li>Nessuna offerta ancora presente</li>
+    {% endfor %}
+</ul>
+
+<hr>
+{% if request.user.is_authenticated and request.user.id != object.creatore.id %}
+<h4>Fai la tua offerta</h4>
+
+<form action="{%url 'fai_offerta' object.pk %}" method="post">
+    {% csrf_token %}
+    {{form_offerta.as_p}}
+    <button type="submit">Piazza Offerta</button>
+</form>
+{% elif request.user.id == object.creatore.id %}
+<p><em>Questa é una tua asta. Non puoi fare offerte sui tuoi oggetti</em></p>
+{% else %}
+<p><em>Devi essere loggato per fare offerte</em></p>
+{% endif %}
+
+{% endblock %}

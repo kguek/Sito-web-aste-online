@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Aste</title>
+</head>
+
+<body>
+    <header>
+        <h1>Gestione Aste</h1>
+        <nav>
+            <a href="/">Home</a>
+            {% if request.user.is_authenticated %}
+            Benvenuto, <strong>{{request.user.username}}</strong> |
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="submit" value="Logout">
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}">Login</a> |
+            <a href="{% url 'registrazione' %}">Registrazione</a>
+            {% endif %}
+        </nav>
+        <hr>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>Gestione Aste</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+{% extends 'gestione_aste/base.html' %}
+
+{% block content %}
+<h2>Registrazione</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Registrati">
+</form>
+{% endblock %}
