@@ -18,6 +18,8 @@ class Asta(models.Model):
     creatore=models.ForeignKey(User, on_delete=models.CASCADE, related_name='aste_create')
     attiva=models.BooleanField(default=True)    
 
+    categoria=models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True, blank=True)
+
     #Creiamo un metodo per visualizzare il titolo dell'asta
     def __str__(self):
         return f"{self.titolo} - Creata da: {self.creatore}" 
@@ -31,4 +33,13 @@ class Offerta(models.Model):
 
     def __str__(self):
         return f"Offerta di {self.importo} per l'asta {self.asta.titolo} da {self.offerente.username}"
+
+class Categoria(models.Model):
+    nome=models.CharField(max_length=100,unique=True)
+    descrizione=models.TextField(blank=True,null=True)
+
+    def __str__(self):
+        return self.nome
+
+    
             

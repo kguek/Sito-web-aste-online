@@ -25,11 +25,28 @@ class AstaListView(ListView):
     context_object_name = 'aste'
     
     def get_queryset(self):
-        return Asta.objects.filter(attiva=True).order_by('-data_creazione')
+       queryset=Asta.objects.filter(attiva=True).order_by('-data_scadenza')
+
+       query_testo=self.request.GET.get('q')
+       query_categoria=self.request.GET.get('categoria')
+
+       if query_testo:
+            queryset=queryset.filter(titolo__icontains=query_testo)
+
+       if query_categoria and query_categoria != '':
+            queryset=queryset.filter(categoria_id=query_categoria)
+
+       return queryset
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['categorie']=Categoria.objects.all()
+        return context
+
 
 class AstaCreateView(LoginRequiredMixin, CreateView):
     model = Asta
-    fields=['titolo', 'descrizione', 'immagine','prezzo_iniziale', 'data_scadenza']
+    fields=['titolo', 'descrizione', 'categoria', 'immagine','prezzo_iniziale', 'data_scadenza']
     template_name='gestione_aste/asta_create.html'
     success_url=reverse_lazy('home')
 
