@@ -6,7 +6,7 @@
     {% for asta in aste %}
     <li>
         <strong>{{asta.titolo}}</strong> <br>
-        Prezzo attuale/base: {{asta.prezzo_iniziale}} € <br>
+        Prezzo offerta attuale: {{asta.prezzo_corrente}} € <br>
         Scade il: {{asta.data_scadenza}} <br>
         Venditore: {{asta.creatore.username}} <br>
         <a href="{%url 'dettaglio_asta' asta.pk %}">Vedi Dettagli &rarr;</a>

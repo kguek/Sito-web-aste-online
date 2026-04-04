@@ -1,0 +1,11 @@
+{% extends 'gestione_aste/base.html' %}
+
+{% block content %}
+<h2>Elimina Asta</h2>
+<p>Sei sicuro di voler eliminare l'asta "{{ asta.titolo }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sì, elimina l'asta</button>
+    <a href="{% url 'area_personale' %}">Annulla</a>
+</form>
+{% endblock %}

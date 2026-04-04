@@ -13,6 +13,7 @@
             <a href="/">Home</a>
             {% if request.user.is_authenticated %}
             Benvenuto, <strong>{{request.user.username}}</strong>, <a href="{% url 'asta-nuova' %}"> Inserisci Asta</a>|
+            <a href="{% url 'area_personale' %}">Area Personale</a>
             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <input type="submit" value="Logout">
@@ -33,9 +34,11 @@
                     <option value="">Tutte le categorie</option>
 
                     {% for cat in categorie_globali %}
-                    <option value="{{ cat.id }}" {% if request.GET.categoria == cat.id|stringformat:"s" %}selected{% endif %}>
-                        {{ cat.nome }}
-                    </option>
+                    {% if request.GET.categoria == cat.id|stringformat:"s" %}
+                    <option value="{{ cat.id }}" selected>{{ cat.nome }}</option>
+                    {% else %}
+                    <option value="{{ cat.id }}">{{ cat.nome }}</option>
+                    {% endif %}
                     {% endfor %}
                 </select>
 

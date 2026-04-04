@@ -11,6 +11,7 @@ class Asta(models.Model):
     #Creiamo un cartella specifica per le immagini uploadate
     immagine = models.ImageField(upload_to='immagini_aste/', blank=True, null=True)
     prezzo_iniziale = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    prezzo_corrente = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     data_creazione=models.DateTimeField(auto_now_add=True)
     data_scadenza=models.DateTimeField()
     
@@ -23,6 +24,11 @@ class Asta(models.Model):
     #Creiamo un metodo per visualizzare il titolo dell'asta
     def __str__(self):
         return f"{self.titolo} - Creata da: {self.creatore}" 
+
+    def save(self, *args, **kwargs):
+        if not self.pk and self.prezzo_corrente == 0.00:
+            self.prezzo_corrente = self.prezzo_iniziale
+        super().save(*args, **kwargs)
 
 
 class Offerta(models.Model):

@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from django.utils import timezone
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.http import JsonResponse
 
 
@@ -68,7 +68,22 @@ class AstaDetailView(LoginRequiredMixin, DetailView):
         context['form_offerta']=FormVuoto()
         return context
 
-        
+class AreaPersonaleView(LoginRequiredMixin,ListView):
+     model=Asta
+     template_name='gestione_aste/area_personale.html'
+     context_object_name='aste_utente'
+
+     def get_queryset(self):
+          return Asta.objects.filter(creatore=self.request.user).order_by('-data_scadenza')
+
+class AstaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+     model=Asta
+     template_name='gestione_aste/asta_delete.html'
+     success_url=reverse_lazy('area_personale')
+
+     def test_func(self):
+          asta=self.get_object()
+          return self.request.user==asta.creatore
 
 class OffertaCreateView(LoginRequiredMixin, CreateView):
      model = Offerta
@@ -93,6 +108,11 @@ class OffertaCreateView(LoginRequiredMixin, CreateView):
           
           form.instance.offerente=self.request.user
           form.instance.asta=asta
+          
+          # Aggiorna il prezzo corrente dell'asta globale col nuovo importo
+          asta.prezzo_corrente = importo_offerto
+          asta.save()
+          
           return super().form_valid(form)
 
      def get_success_url(self):

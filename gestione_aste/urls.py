@@ -8,4 +8,6 @@ urlpatterns = [
     path('asta/<int:pk>/', views.AstaDetailView.as_view(), name='dettaglio_asta'),   
     path('asta/<int:pk>/offri/', views.OffertaCreateView.as_view(), name='fai_offerta'),
     path('api/asta/<int:pk>/max-offerta/', views.api_max_offerta, name='api_max_offerta'),
+    path('area-personale/', views.AreaPersonaleView.as_view(), name='area_personale'),
+    path('asta/<int:pk>/elimina/', views.AstaDeleteView.as_view(), name='elimina_asta'),
 ]

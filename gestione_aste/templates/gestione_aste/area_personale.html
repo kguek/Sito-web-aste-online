@@ -1,0 +1,23 @@
+{% extends "gestione_aste/base.html" %}
+
+{% block content %}
+<h2>La Mia Area Personale</h2>
+<p>Qui puoi gestire tutti gli oggetti che hai messo all'asta.</p>
+<p>Aste attive: {{aste_utente.count}}</p>
+
+<ul>
+    {% for asta in object_list %}
+    <li>
+        <strong><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></strong>
+        - Prezzo attuale: {{ asta.prezzo_corrente }} €
+        - Scadenza: {{ asta.data_scadenza }}
+        <br>
+        <a href="{% url 'elimina_asta' asta.pk %}" style="color: red; font-weight: bold;">[Elimina Annuncio]</a>
+    </li>
+    <hr>
+    {% empty %}
+    <p>Non hai ancora messo nessun oggetto all'asta.</p>
+    <a href="{% url 'asta-nuova' %}">Crea la tua prima asta!</a>
+    {% endfor %}
+</ul>
+{% endblock %}
