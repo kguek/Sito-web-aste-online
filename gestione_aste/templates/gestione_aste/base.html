@@ -14,6 +14,7 @@
             {% if request.user.is_authenticated %}
             Benvenuto, <strong>{{request.user.username}}</strong>, <a href="{% url 'asta-nuova' %}"> Inserisci Asta</a>|
             <a href="{% url 'area_personale' %}">Area Personale</a>
+            <a href="{% url 'aste_preferite' %}">Wishlist</a>
             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <input type="submit" value="Logout">
@@ -32,7 +33,6 @@
                 <label for="categoria">Categoria:</label>
                 <select name="categoria" id="categoria">
                     <option value="">Tutte le categorie</option>
-
                     {% for cat in categorie_globali %}
                     {% if request.GET.categoria == cat.id|stringformat:"s" %}
                     <option value="{{ cat.id }}" selected>{{ cat.nome }}</option>

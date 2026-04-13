@@ -1,0 +1,29 @@
+{% extends "gestione_aste/base.html" %}
+
+{% block content %}
+<h2>Valuta la tua esperienza</h2>
+
+<div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd;">
+    <p style="margin-top: 0; font-size: 1.1em;">Stai recensendo il venditore: <strong><a
+                href="{% url 'profilo_venditore' venditore.pk %}" style="color: #007bff; text-decoration: none;">{{
+                venditore.username }}</a></strong></p>
+
+    <p style="margin-bottom: 5px;">Riguardo il tuo aggiudicamento del seguente articolo:</p>
+    <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+        <li><strong>{{ asta.titolo }}</strong></li>
+    </ul>
+</div>
+
+<form method="post" style="background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><em style="color: #666; font-size: 0.9em;">(Inserisci un voto da 1 a 5)</em></p>
+    <div style="margin-top: 20px;">
+        <button type="submit"
+            style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">Pubblica
+            Recensione</button>
+        <a href="{% url 'profilo_venditore' venditore.pk %}"
+            style="margin-left: 15px; color: #dc3545; text-decoration: none;">Annulla</a>
+    </div>
+</form>
+{% endblock %}

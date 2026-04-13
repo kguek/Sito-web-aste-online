@@ -1,0 +1,44 @@
+{% extends "gestione_aste/base.html" %}
+
+{% block content %}
+<h2>Profilo di {{ venditore.username }}</h2>
+
+<div style="background-color: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+    <strong>Affidabilità Venditore:</strong>
+    {% if media_voto > 0 %}
+    {{ media_voto }} su 5.0 ⭐
+    {% else %}
+    <em>Nessuna recensione ancora.</em>
+    {% endif %}
+</div>
+
+
+<hr>
+
+<h3>Recensioni Ricevute</h3>
+<ul>
+    {% for recensione in venditore.recensioni_ricevute.all %}
+    <li>
+        <strong>{{ recensione.voto }} ⭐</strong> - "{{ recensione.commento|default:'Senza commento' }}"
+        <br>
+        <span style="font-size: 0.9em; color: #666;">
+            (Acquisto: <strong>{{ recensione.asta.titolo|default:'Non specificato' }}</strong>) 
+            - <em>Scritta da {{ recensione.autore.username }} il {{ recensione.data_recensione|date:"d/m/Y" }}</em>
+        </span>
+    </li>
+    {% empty %}
+    <p>Nessuno ha ancora recensito questo utente.</p>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h3>Aste Attive di {{ venditore.username }}</h3>
+<ul>
+    {% for asta in aste_attive %}
+    <li><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a> - {{ asta.prezzo_iniziale }} €</li>
+    {% empty %}
+    <p>Nessuna asta attiva al momento.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

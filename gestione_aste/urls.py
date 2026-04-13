@@ -10,4 +10,8 @@ urlpatterns = [
     path('api/asta/<int:pk>/max-offerta/', views.api_max_offerta, name='api_max_offerta'),
     path('area-personale/', views.AreaPersonaleView.as_view(), name='area_personale'),
     path('asta/<int:pk>/elimina/', views.AstaDeleteView.as_view(), name='elimina_asta'),
+    path('asta/<int:pk>/preferito/', views.toggle_preferito, name='toggle_preferito'),
+    path('i-miei-preferiti/', views.ListaPreferitiView.as_view(), name='aste_preferite'),
+    path('venditore/<int:pk>/', views.ProfiloVenditoreView.as_view(), name='profilo_venditore'),
+    path('asta/<int:pk>/recensione/', views.CreaRecensioneView.as_view(), name='crea_recensione'),
 ]

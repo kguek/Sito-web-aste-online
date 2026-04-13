@@ -2,10 +2,27 @@
 
 {%block content%}
 <h2>{{object.titolo}}</h2>
-<p><strong>Venditore:</strong> {{object.creatore.username}}</p>
+<p><strong>Venditore:</strong><a href="{%url 'profilo_venditore' object.creatore.pk %}">{{object.creatore.username}}</a>
+</p>
 
 {% if object.immagine %}
 <img src="{{object.immagine.url}}" alt="{{object.titolo}}" style="max-width: 300px;">
+{% endif %}
+{% if request.user.is_authenticated and request.user.id != object.creatore.id %}
+<form action="{%url 'toggle_preferito' object.pk %}" method="post" style="margin: 10px 0;">
+    {% csrf_token %}
+    {% if request.user in object.preferiti.all %}
+    <button type="submit"
+        style="background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        ♥️ Rimuovi dai preferiti
+    </button>
+    {% else %}
+    <button type="submit"
+        style="background-color: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        ♡ Aggiungi ai preferiti
+    </button>
+    {% endif %}
+</form>
 {% endif %}
 <p><strong>Descrizione:</strong> {{object.descrizione}}</p>
 <p><strong>Prezzo Attuale:</strong> <span id="prezzo-live">{{ object.prezzo_iniziale }}</span> €</p>
@@ -23,9 +40,12 @@
 </ul>
 
 <hr>
-{% if request.user.is_authenticated and request.user.id != object.creatore.id %}
+{% if is_conclusa %}
+<h4>Asta Conclusa</h4>
+<p>Questa asta è terminata e non accetta più nuove offerte.</p>
+{% elif request.user.is_authenticated and request.user.id != object.creatore.id %}
 <h4>Fai la tua offerta</h4>
-<p><small>Offerta minima accettata: <span id="minimo-richiesto">...</span> €</small></p>
+<p><small>Offerta minima: <span id="minimo-richiesto">...</span> €</small></p>
 <form action="{%url 'fai_offerta' object.pk %}" method="post">
     {% csrf_token %}
     {{form_offerta.as_p}}

@@ -1,0 +1,25 @@
+{% extends "gestione_aste/base.html" %}
+
+
+{% block content %}
+<h2>La mia Wishlist ❤️</h2>
+<p>Ecco le aste che stai tenendo d'occhio:</p>
+
+<ul>
+    {% for asta in object_list %}
+    <li>
+        <strong><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></strong>
+        - Scade il: {{ asta.data_scadenza }}
+        <form action="{% url 'toggle_preferito' asta.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit"
+                style="background: none; border: none; color: red; text-decoration: underline; cursor: pointer;">[Rimuovi]</button>
+        </form>
+    </li>
+    <hr>
+    {% empty %}
+    <p>Non hai ancora aggiunto nessuna asta ai preferiti.</p>
+    <a href="{% url 'home' %}">Torna alla home per esplorare!</a>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import MinValueValidator,MaxValueValidator
 
 #Creazione del modello Asta ereditando da models.Model
 
 class Asta(models.Model):
     titolo = models.CharField(max_length=200)
     descrizione = models.TextField()
+    preferiti=models.ManyToManyField(User,related_name='aste_preferite',blank=True)
     
     #Creiamo un cartella specifica per le immagini uploadate
     immagine = models.ImageField(upload_to='immagini_aste/', blank=True, null=True)
@@ -47,5 +49,18 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nome
 
+class Recensione(models.Model):
+    autore=models.ForeignKey(User,on_delete=models.CASCADE,related_name='recensioni_create')
+    destinatario=models.ForeignKey(User,on_delete=models.CASCADE,related_name='recensioni_ricevute')
+    asta=models.OneToOneField(Asta, on_delete=models.CASCADE, related_name='recensione', null=True, blank=True)
+    voto=models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+    commento=models.TextField(blank=True,null=True)
+    data_recensione=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Recensione di {self.autore.username} per {self.destinatario.username} sull'asta {self.asta.titolo if self.asta else 'N/A'}"
+
+    
+    
     
             
