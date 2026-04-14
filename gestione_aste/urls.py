@@ -14,4 +14,6 @@ urlpatterns = [
     path('i-miei-preferiti/', views.ListaPreferitiView.as_view(), name='aste_preferite'),
     path('venditore/<int:pk>/', views.ProfiloVenditoreView.as_view(), name='profilo_venditore'),
     path('asta/<int:pk>/recensione/', views.CreaRecensioneView.as_view(), name='crea_recensione'),
+    path('asta/<int:asta_id>/chat/<int:altro_utente_id>/', views.chat_view, name='chat'),
+    path('inbox/', views.InboxView.as_view(), name='inbox'),
 ]

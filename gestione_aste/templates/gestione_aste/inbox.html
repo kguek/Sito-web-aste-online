@@ -1,0 +1,35 @@
+{% extends "gestione_aste/base.html" %}
+
+{% block content %}
+<h2>La tua Posta in Arrivo</h2>
+<p style="color: #666; margin-top: -10px; margin-bottom: 20px;">Gestisci le tue comunicazioni divise per asta e acquirente/venditore.</p>
+
+<div style="display: flex; flex-direction: column; gap: 15px;">
+    {% for conv in conversazioni %}
+    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+        <h4 style="margin-top: 0; margin-bottom: 5px;">
+            Asta: <a href="{% url 'dettaglio_asta' conv.asta.id %}" style="color: #0056b3; text-decoration: none;">{{ conv.asta.titolo }}</a>
+        </h4>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p style="margin: 0; font-weight: bold; color: #333;">Chat con: {{ conv.altro_utente.username }}</p>
+                <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #555;">
+                    <em>Ultimo msg:</em> "{{ conv.ultimo_messaggio.contenuto }}"
+                </p>
+                <p style="margin: 2px 0 0 0; font-size: 0.8em; color: #999;">
+                    Inviato il: {{ conv.ultimo_messaggio.data_invio|date:"d/m/Y H:i" }}
+                </p>
+            </div>
+            <div>
+                <a href="{% url 'chat' conv.asta.id conv.altro_utente.id %}" 
+                   style="display: inline-block; background-color: #28a745; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                    Apri Chat
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p style="text-align: center; color: #888; font-style: italic; padding: 20px;">Nessuna conversazione ancora iniziata.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -22,7 +22,7 @@
         <strong>{{ recensione.voto }} ⭐</strong> - "{{ recensione.commento|default:'Senza commento' }}"
         <br>
         <span style="font-size: 0.9em; color: #666;">
-            (Acquisto: <strong>{{ recensione.asta.titolo|default:'Non specificato' }}</strong>) 
+            (Acquisto: <strong>{{ recensione.asta.titolo|default:'Non specificato' }}</strong>)
             - <em>Scritta da {{ recensione.autore.username }} il {{ recensione.data_recensione|date:"d/m/Y" }}</em>
         </span>
     </li>
@@ -33,7 +33,7 @@
 
 <hr>
 
-<h3>Aste Attive di {{ venditore.username }}</h3>
+<h3>Aste di {{ venditore.username }}</h3>
 <ul>
     {% for asta in aste_attive %}
     <li><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a> - {{ asta.prezzo_iniziale }} €</li>

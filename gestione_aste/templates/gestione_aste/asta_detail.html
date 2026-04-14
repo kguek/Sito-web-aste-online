@@ -27,6 +27,11 @@
 <p><strong>Descrizione:</strong> {{object.descrizione}}</p>
 <p><strong>Prezzo Attuale:</strong> <span id="prezzo-live">{{ object.prezzo_iniziale }}</span> €</p>
 <p><strong>Scadenza:</strong> {{object.data_scadenza}}</p>
+{% if request.user.is_authenticated and request.user != object.creatore %}
+<a href="{% url 'chat' object.id object.creatore.id %}"
+    style="display:inline-block; padding: 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px;">💬
+    Contatta Venditore</a>
+{% endif %}
 
 <hr>
 <h3>Offerte Attuali</h3>

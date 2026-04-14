@@ -8,12 +8,13 @@
 
 <body>
     <header>
-        <h1>Gestione Aste</h1>
+        <h1>Sito Aste online</h1>
         <nav>
             <a href="/">Home</a>
             {% if request.user.is_authenticated %}
             Benvenuto, <strong>{{request.user.username}}</strong>, <a href="{% url 'asta-nuova' %}"> Inserisci Asta</a>|
-            <a href="{% url 'area_personale' %}">Area Personale</a>
+            <a href="{% url 'area_personale' %}">Area Personale</a>|
+            <a href="{% url 'inbox' %}">Messaggi</a>|
             <a href="{% url 'aste_preferite' %}">Wishlist</a>
             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
