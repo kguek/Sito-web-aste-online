@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Personal Area - aste_online</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e8e8e8",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-container": "#ff828a",
+                    "on-tertiary-fixed": "#001f26",
+                    "primary": "#570013",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#ffb3b5",
+                    "surface-container": "#eeeeee",
+                    "secondary": "#90494d",
+                    "on-primary-fixed-variant": "#8e0f28",
+                    "on-background": "#1a1c1c",
+                    "on-secondary-fixed": "#3b070e",
+                    "background": "#f9f9f9",
+                    "surface-tint": "#af2b3e",
+                    "secondary-fixed": "#ffdada",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#584141",
+                    "inverse-primary": "#ffb3b5",
+                    "surface-variant": "#e2e2e2",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#004451",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#79363b",
+                    "surface-container-highest": "#e2e2e2",
+                    "surface": "#f9f9f9",
+                    "tertiary": "#002c36",
+                    "on-tertiary-container": "#7cb0c0",
+                    "primary-fixed-dim": "#ffb3b5",
+                    "on-secondary-fixed-variant": "#743237",
+                    "secondary-container": "#fda3a6",
+                    "surface-dim": "#dadada",
+                    "outline-variant": "#e0bfbf",
+                    "tertiary-fixed-dim": "#9acfde",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-low": "#f3f3f3",
+                    "inverse-on-surface": "#f1f1f1",
+                    "primary-fixed": "#ffdada",
+                    "primary-container": "#800020",
+                    "on-surface": "#1a1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#40000b",
+                    "inverse-surface": "#2f3131",
+                    "outline": "#8c7071",
+                    "tertiary-fixed": "#b6ebfb",
+                    "on-tertiary-fixed-variant": "#114d5b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope", "sans-serif"],
+                    "body": ["Inter", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9f9; color: #1a1c1c; }
+        h1, h2, h3, h4, h5, h6, .font-headline { font-family: 'Manrope', sans-serif; }
+        .bordeaux-gradient { background: linear-gradient(135deg, #570013 0%, #800020 100%); }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-white dark:bg-zinc-950 text-[#800020] dark:text-red-400 font-['Manrope'] text-sm tracking-tight font-medium docked full-width top-0 bg-[#f3f3f3] dark:bg-zinc-900 flat no shadows hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="font-['Manrope'] text-2xl font-extrabold tracking-tighter text-[#800020] dark:text-white uppercase">
+                aste_online
+            </div>
+<nav class="hidden md:flex space-x-6 items-center">
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Home</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Insert Auction</a>
+<a class="text-[#800020] dark:text-red-400 font-bold border-b-2 border-[#800020] pb-1" href="#">Personal Area</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Messages</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Wishlist</a>
+</nav>
+<div class="flex items-center space-x-4">
+<div class="relative">
+<span class="material-symbols-outlined text-zinc-600 cursor-pointer hover:text-primary transition-colors">search</span>
+</div>
+<button class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors font-semibold">Login</button>
+<button class="text-[#800020] dark:text-red-400 font-bold">Logout</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-screen-2xl mx-auto px-4 md:px-8 py-12 flex flex-col gap-12">
+<!-- User Profile Header & Stats (Bento-style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Profile Card -->
+<div class="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-xl p-8 flex flex-col md:flex-row items-center md:items-start gap-8 shadow-[0_24px_48px_-12px_rgba(26,28,28,0.06)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-2 h-full bg-primary-container"></div>
+<img alt="User Profile" class="w-32 h-32 rounded-full object-cover shadow-md border-4 border-surface" data-alt="Portrait of a distinguished man in a tailored suit, neutral sophisticated background, soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYJQf6eA4NKxwi-K4qTGNHbo9XM1ic9sSdbUf5tMEzu8fEg-cvNRHRaFKH0U-MIQXQ17CvuKvW39ffqytXOluVVtJgOFgrrHSVDMCy68YenqMkQTro-BMiDoJaiRVCdKV5-QMAubq-AyIGlvfGFwGu5cp5T4t4A3t0XFjbq_jp_NzzvxZ2SaF3QXgfV-QQKaixdrWmDU0kuM61N57f-qw6ymX2OSq10EgY-ldgiYFEdVAfVq6XbBDMeYQVqb-uoWerbMz45feh1T8"/>
+<div class="flex flex-col flex-grow text-center md:text-left">
+<h1 class="text-4xl font-headline font-bold text-on-surface mb-2">Alexander Sterling</h1>
+<p class="text-on-surface-variant font-body text-sm mb-4">Member since 2019 • Premium Collector</p>
+<div class="flex flex-wrap justify-center md:justify-start gap-6 mt-auto">
+<div>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-wider mb-1">Total Sales</p>
+<p class="text-2xl font-headline font-semibold text-primary-container">€45,200</p>
+</div>
+<div class="w-px h-10 bg-surface-variant hidden md:block"></div>
+<div>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-wider mb-1">Active Bids</p>
+<p class="text-2xl font-headline font-semibold text-primary-container">3</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Reputation Card -->
+<div class="col-span-1 bg-surface-container-low rounded-xl p-8 flex flex-col justify-center items-center text-center">
+<h2 class="text-sm font-label text-on-surface-variant uppercase tracking-widest mb-4">Seller Reputation</h2>
+<div class="flex items-center gap-2 mb-2 text-primary-container">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-4xl text-surface-variant" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<p class="text-3xl font-headline font-bold text-on-surface">4.8 <span class="text-lg font-normal text-on-surface-variant">/ 5.0</span></p>
+<p class="text-sm font-body text-on-surface-variant mt-2 underline decoration-surface-variant underline-offset-4 cursor-pointer hover:text-primary transition-colors">Based on 142 Reviews</p>
+</div>
+</section>
+<!-- Your Auctions for Sale (Live) -->
+<section>
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="text-3xl font-headline font-bold text-on-surface">Your Auctions for Sale</h2>
+<p class="text-sm font-body text-on-surface-variant mt-1">Items you are currently curating.</p>
+</div>
+<button class="hidden md:flex items-center gap-2 text-primary font-label text-sm uppercase tracking-wider hover:text-primary-container transition-colors">
+                    View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Auction Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl flex flex-col overflow-hidden group">
+<div class="relative h-64 overflow-hidden rounded-t-xl">
+<img alt="Leica Camera" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Vintage Leica M3 camera resting on a dark walnut table, dramatic lighting highlighting the metal details" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU1uUy5yLkQXSr8AW6ALuNHQkziGqd4_ZJEn0neXOsXe8LYnCoWSUJA7S8hhJDGMqurUFw1OdrxqMbOOfY-TaQM1XKkdlGyZwM9U_8WhodIrruhTBNX4GpN236pcwgXXr3DYqj9x--lz3Y32yhmYF2ifRskxQul5PnKJSoB8hyxFGNnj3Yp0eysiQMj7i5P0oqe2mmL5DkKzlgQZ8h6p2wv4ZNVD7LnXTK_CkTnl6IW8JRbEcI7Sjl6MswW--goHTBKcuJworsuqI"/>
+<!-- Glass Status Badge -->
+<div class="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-xs font-label font-bold text-primary uppercase tracking-wider">Live</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h3 class="text-xl font-headline font-semibold text-on-surface mb-2">Vintage Leica M3 Camera</h3>
+<p class="text-sm font-body text-on-surface-variant mb-6 line-clamp-2">Immaculate condition, single-stroke model from 1958. Includes original leather case and summicron 50mm f/2 lens.</p>
+<div class="mt-auto bg-surface-container-high rounded-lg p-4 flex justify-between items-center">
+<div>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-wider">Current Bid</p>
+<p class="text-2xl font-headline font-bold text-primary-container">€2,450</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-wider">Ends In</p>
+<p class="text-lg font-headline font-medium text-on-surface">4h 12m</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Auction Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl flex flex-col overflow-hidden group">
+<div class="relative h-64 overflow-hidden rounded-t-xl">
+<img alt="Abstract Painting" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Abstract expressionist painting with bold red and black strokes, displayed in a modern gallery setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXHOBZYnseOdUYx3MRKa7PBcb5odeW-P5SWZIPQiiBsYc8yj6QbcL9HFpo25yEhkQZSYIdx7ZAgPG6VrB0Xcj5NOTbblC-zxNJT4SFPM4JcMOIbIkYKPeu2SKKCdyn9umADUPpWRY2QAYmjTy8ejZQ2SRtDgj3l_TLgqkOXJvDD9glFFeA40pGIYHwF0VJSEq-kjGFp-1_-o969nKj0x17jSvy8JrGhLttYTwg3tjevbiZGtucS7D6dpt89_XOON9YkecmVnpQBNE"/>
+<div class="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-xs font-label font-bold text-primary uppercase tracking-wider">Live</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h3 class="text-xl font-headline font-semibold text-on-surface mb-2">Untitled - M. Rothko Style</h3>
+<p class="text-sm font-body text-on-surface-variant mb-6 line-clamp-2">Large scale oil on canvas. Bold composition with deep reds and blacks. Unsigned but authenticated era.</p>
+<div class="mt-auto bg-surface-container-high rounded-lg p-4 flex justify-between items-center">
+<div>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-wider">Current Bid</p>
+<p class="text-2xl font-headline font-bold text-primary-container">€18,000</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-wider">Ends In</p>
+<p class="text-lg font-headline font-medium text-on-surface">2d 14h</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Asymmetric Split Section: Won vs Closed -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Auctions Won (Left - wider) -->
+<section class="lg:col-span-7 flex flex-col gap-6">
+<div>
+<h2 class="text-2xl font-headline font-bold text-on-surface border-b-2 border-surface-container-high pb-4">Auctions Won</h2>
+</div>
+<div class="flex flex-col gap-6">
+<!-- Won Item 1 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-6 group hover:bg-surface-container-low transition-colors">
+<img alt="Wristwatch" class="w-24 h-24 rounded-lg object-cover" data-alt="Minimalist luxury wristwatch with white dial and brown leather strap on a light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx9iwrLaW_RixEPgV5fGvRcbaxAO3pzeEDZKFfCZlZniV08PG4uPPeWelO5xlMbvGZ-ZamxeTyzmTgTJ5iGZ7QmCOVDMFwWYGcZ5bR8ZHvp0Tvw1p7j1M-MaS2N0bMQrDaY-5758lB3uwfq_oR-Osdyj0MsrhsltOz9SUSnQ83Q2g4zQhvFh4lqM2YEJdt1p6iQd0FzZJpnf4H5NqABu8pJ6uOtrdZmnq2ouMyNLYC1l93Elqj6RTdVMho1Td7IdCHRLhnnDM962g"/>
+<div class="flex-grow">
+<h4 class="font-headline font-semibold text-lg text-on-surface">Nomos Tangente 38</h4>
+<p class="text-sm font-body text-on-surface-variant mb-2">Won for €1,200 • Dec 12, 2023</p>
+<a class="inline-flex items-center gap-1 text-xs font-label font-medium text-primary-container hover:text-primary transition-colors underline underline-offset-4" href="#">
+<span class="material-symbols-outlined text-sm">rate_review</span> Leave a Review
+                            </a>
+</div>
+<div class="px-4 py-2 bg-surface rounded-md border border-outline-variant/15 text-sm font-label text-on-surface-variant hidden sm:block">
+                            Delivered
+                        </div>
+</div>
+<!-- Won Item 2 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-6 group hover:bg-surface-container-low transition-colors">
+<img alt="Lounge Chair" class="w-24 h-24 rounded-lg object-cover" data-alt="Mid-century modern lounge chair in dark teal velvet against a plain white wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvQxViNKVlRYjB2RI_Y0nLirLdnQc0UUgLWIP6B3fCfEuAd-lQ5u7Pnst1j799iwFJeK6fc_afB1yEO6onRvhG2ybLV36OQ2pfGNjxF9H1T9fYIB7hE-7ctp-rR5P93-gr32axPUDxByJBS2PWGiwTk_GuS2SjExKXjZLFV6rKApvtbQMIEEFYT0L3bN67lMG2QyOJZ-g-J2r3MGzsI7Nk8--f7zWL-A3yv7Z8OSnMLYLkuvDJFt4ueTDjq595q_xJs4CP5_frqww"/>
+<div class="flex-grow">
+<h4 class="font-headline font-semibold text-lg text-on-surface">Eames Style Lounge Chair</h4>
+<p class="text-sm font-body text-on-surface-variant mb-2">Won for €850 • Nov 28, 2023</p>
+<span class="text-xs font-label text-surface-variant italic">Review submitted</span>
+</div>
+<div class="px-4 py-2 bg-surface rounded-md border border-outline-variant/15 text-sm font-label text-on-surface-variant hidden sm:block">
+                            Delivered
+                        </div>
+</div>
+</div>
+</section>
+<!-- Closed Auctions (Right - narrower) -->
+<section class="lg:col-span-5 flex flex-col gap-6">
+<div>
+<h2 class="text-2xl font-headline font-bold text-on-surface border-b-2 border-surface-container-high pb-4">Closed Auctions (Sales)</h2>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Closed Item 1 -->
+<div class="flex items-center justify-between py-3 border-b border-surface-container-high/50 group">
+<div class="flex flex-col">
+<span class="font-headline font-medium text-on-surface group-hover:text-primary-container transition-colors">19th Century French Mirror</span>
+<span class="text-xs font-body text-on-surface-variant">Sold • Oct 15, 2023</span>
+</div>
+<span class="font-headline font-bold text-on-surface">€3,200</span>
+</div>
+<!-- Closed Item 2 -->
+<div class="flex items-center justify-between py-3 border-b border-surface-container-high/50 group">
+<div class="flex flex-col">
+<span class="font-headline font-medium text-on-surface group-hover:text-primary-container transition-colors">Persian Silk Rug</span>
+<span class="text-xs font-body text-on-surface-variant">Sold • Sep 02, 2023</span>
+</div>
+<span class="font-headline font-bold text-on-surface">€1,850</span>
+</div>
+<!-- Closed Item 3 -->
+<div class="flex items-center justify-between py-3 border-b border-surface-container-high/50 group">
+<div class="flex flex-col">
+<span class="font-headline font-medium text-on-surface group-hover:text-primary-container transition-colors">Silver Candelabra Set</span>
+<span class="text-xs font-body text-on-surface-variant">Unsold • Aug 14, 2023</span>
+</div>
+<span class="font-headline text-surface-variant italic">--</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f3f3f3] dark:bg-zinc-900 text-[#800020] dark:text-red-400 font-['Inter'] text-xs uppercase tracking-widest full-width py-12 tonal shift from surface to surface-container-low flat no shadows opacity-80 hover:opacity-100 transition-opacity mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 border-t border-transparent max-w-screen-2xl mx-auto gap-8 md:gap-0">
+<div class="font-['Manrope'] font-bold text-[#800020] text-lg">
+                © 2024 aste_online. The Curated Gallery.
+            </div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4" href="#">Terms of Service</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4" href="#">Privacy Policy</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4" href="#">Auction Rules</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+</body></html>

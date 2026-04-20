@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auction Detail - aste_online</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e8e8e8",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-container": "#ff828a",
+                    "on-tertiary-fixed": "#001f26",
+                    "primary": "#570013",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#ffb3b5",
+                    "surface-container": "#eeeeee",
+                    "secondary": "#90494d",
+                    "on-primary-fixed-variant": "#8e0f28",
+                    "on-background": "#1a1c1c",
+                    "on-secondary-fixed": "#3b070e",
+                    "background": "#f9f9f9",
+                    "surface-tint": "#af2b3e",
+                    "secondary-fixed": "#ffdada",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#584141",
+                    "inverse-primary": "#ffb3b5",
+                    "surface-variant": "#e2e2e2",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#004451",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#79363b",
+                    "surface-container-highest": "#e2e2e2",
+                    "surface": "#f9f9f9",
+                    "tertiary": "#002c36",
+                    "on-tertiary-container": "#7cb0c0",
+                    "primary-fixed-dim": "#ffb3b5",
+                    "on-secondary-fixed-variant": "#743237",
+                    "secondary-container": "#fda3a6",
+                    "surface-dim": "#dadada",
+                    "outline-variant": "#e0bfbf",
+                    "tertiary-fixed-dim": "#9acfde",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-low": "#f3f3f3",
+                    "inverse-on-surface": "#f1f1f1",
+                    "primary-fixed": "#ffdada",
+                    "primary-container": "#800020",
+                    "on-surface": "#1a1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#40000b",
+                    "inverse-surface": "#2f3131",
+                    "outline": "#8c7071",
+                    "tertiary-fixed": "#b6ebfb",
+                    "on-tertiary-fixed-variant": "#114d5b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope", "sans-serif"],
+                    "body": ["Inter", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9f9; color: #1a1c1c; }
+        h1, h2, h3, h4, h5, h6, .font-headline { font-family: 'Manrope', sans-serif; }
+        .bordeaux-gradient { background: linear-gradient(135deg, #570013, #800020); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest font-body text-sm tracking-tight font-medium top-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto bg-surface-container-low">
+<div class="font-headline text-2xl font-extrabold tracking-tighter text-primary-container">aste_online</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary-container transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary-container transition-colors" href="#">Insert Auction</a>
+<a class="text-on-surface-variant hover:text-primary-container transition-colors" href="#">Personal Area</a>
+<a class="text-on-surface-variant hover:text-primary-container transition-colors" href="#">Messages</a>
+<a class="text-on-surface-variant hover:text-primary-container transition-colors" href="#">Wishlist</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-container-lowest border border-outline-variant/15 rounded-full px-4 py-2">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" style="font-size: 20px;">search</span>
+<input class="bg-transparent border-none outline-none text-sm text-on-surface placeholder-on-surface-variant/70 focus:ring-0" placeholder="Search auctions..." type="text"/>
+</div>
+<a class="text-on-surface-variant hover:text-primary-container transition-colors" href="#">Login</a>
+<a class="text-primary-container font-semibold hover:text-primary transition-colors" href="#">Logout</a>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-screen-2xl mx-auto px-4 md:px-8 py-12 flex flex-col lg:flex-row gap-12">
+<!-- Left Column: Image & Details -->
+<div class="lg:w-2/3 flex flex-col gap-8">
+<!-- Hero Image -->
+<div class="relative w-full aspect-video md:aspect-[4/3] bg-surface-container rounded-xl overflow-hidden shadow-[0_24px_48px_-12px_rgba(26,28,28,0.06)]">
+<img alt="Vintage Rolex Submariner" class="w-full h-full object-cover" data-alt="Close up of a vintage luxury mechanical watch with silver and gold detailing against a dark velvet background, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyYwU09Rg2O8OujiJhx_2bn3fmHl_0yVOBwbzwkUFZGuabCThT_TMczSVm4wCyLcgJLRR3gSw3QWyfC2lUlFR1PMFeVlCPz1VDuejG_vYy8nY4pHmuK9PS649t_L6BWqaikKjdefQ7pt_J4ITFAVNZkFkKQU4sNoMoD_RfVCtx0llZDBdICc_hr2eR9paMYb-fk4KaChnnbFwgVNVJDWMSnonWviegwFLYhiOA0s_MLNxZyFVrz1aRHzt4C1iCIKz0CMBKfUWl4YQ"/>
+<!-- Status Badge -->
+<div class="absolute top-6 left-6 bg-surface-container-lowest/80 backdrop-blur-md rounded-full px-4 py-2 flex items-center gap-2 shadow-sm border border-outline-variant/15">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="font-label text-xs font-semibold text-primary uppercase tracking-wider">Active</span>
+</div>
+<!-- Wishlist Action -->
+<button class="absolute top-6 right-6 w-12 h-12 bg-surface-container-lowest/80 backdrop-blur-md rounded-full flex items-center justify-center text-on-surface hover:text-primary-container transition-colors shadow-sm border border-outline-variant/15">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</button>
+</div>
+<!-- Title & Description -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_24px_48px_-12px_rgba(26,28,28,0.06)]">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h1 class="font-headline text-4xl lg:text-5xl font-extrabold text-on-background leading-tight mb-2">Vintage Rolex Submariner (1978)</h1>
+<p class="font-label text-sm text-on-surface-variant uppercase tracking-widest">Lot #49201 • Watches &amp; Timepieces</p>
+</div>
+</div>
+<div class="prose prose-sm md:prose-base text-on-surface leading-relaxed font-body">
+<p class="mb-4">An exceptional example of the iconic Rolex Submariner reference 1680. This timepiece features a beautiful matte dial with perfectly aged tritium hour markers that have developed a warm, creamy patina. The case remains thick and sharp, retaining its original factory chamfers.</p>
+<p>Accompanied by its original presentation box, chronometer certificate, and service history dating back to 1985. A true collector's piece that represents the golden era of Rolex sports watches.</p>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="flex items-center gap-2 px-6 py-3 border border-outline-variant/30 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg">chat_bubble</span>
+                        Contact Seller
+                    </button>
+</div>
+</div>
+</div>
+<!-- Right Column: Bidding Action -->
+<div class="lg:w-1/3 flex flex-col gap-8">
+<!-- Bid Panel -->
+<div class="bg-surface-container-low rounded-xl p-8 sticky top-24">
+<!-- Countdown -->
+<div class="flex items-center justify-between mb-8 pb-6 border-b border-outline-variant/15">
+<div class="flex flex-col">
+<span class="font-label text-xs text-on-surface-variant uppercase tracking-wider mb-1">Time Remaining</span>
+<div class="font-headline text-2xl font-bold text-on-background flex gap-2">
+<span>02<span class="text-sm font-normal text-on-surface-variant">h</span></span>
+<span>45<span class="text-sm font-normal text-on-surface-variant">m</span></span>
+<span>12<span class="text-sm font-normal text-on-surface-variant">s</span></span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-50" style="font-size: 32px;">timer</span>
+</div>
+<!-- Current Price -->
+<div class="mb-8">
+<span class="font-label text-xs text-on-surface-variant uppercase tracking-wider mb-2 block">Current Bid</span>
+<div class="font-headline text-5xl font-extrabold text-primary-container mb-2">€ 14,500</div>
+<div class="bg-surface-bright inline-flex items-center gap-2 px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-sm text-tertiary-container" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-body text-sm font-medium text-tertiary-container">Highest Bidder: <span class="font-bold">M. Rossi</span></span>
+</div>
+</div>
+<!-- Bid Input -->
+<div class="bg-surface-container-high rounded-xl p-6 mb-6">
+<label class="font-label text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-3">Place Your Bid</label>
+<div class="relative mb-4">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-headline text-xl text-on-surface-variant">€</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-lg py-4 pl-10 pr-4 font-headline text-xl font-bold text-on-background focus:border-outline focus:ring-0 transition-colors" placeholder="Enter amount" type="number" value="15000"/>
+</div>
+<button class="w-full bordeaux-gradient text-on-primary font-headline text-lg font-bold py-4 rounded-md shadow-sm hover:opacity-90 transition-opacity">
+                        Place Bid Now
+                    </button>
+<p class="text-center font-label text-xs text-on-surface-variant mt-3">Minimum next bid: € 15,000</p>
+</div>
+</div>
+<!-- Bidding History -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_24px_48px_-12px_rgba(26,28,28,0.06)]">
+<h3 class="font-headline text-xl font-bold text-on-background mb-6">Bid History</h3>
+<div class="flex flex-col gap-0">
+<!-- History Item -->
+<div class="flex justify-between items-center py-4 border-b border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant font-bold text-xs">MR</div>
+<div class="flex flex-col">
+<span class="font-body text-sm font-semibold text-on-background">M. Rossi</span>
+<span class="font-label text-xs text-on-surface-variant">Today, 14:23</span>
+</div>
+</div>
+<span class="font-headline text-lg font-bold text-on-background">€ 14,500</span>
+</div>
+<!-- History Item -->
+<div class="flex justify-between items-center py-4 border-b border-outline-variant/10 bg-surface">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant font-bold text-xs">AL</div>
+<div class="flex flex-col">
+<span class="font-body text-sm font-semibold text-on-background">A. Lusso</span>
+<span class="font-label text-xs text-on-surface-variant">Today, 11:05</span>
+</div>
+</div>
+<span class="font-headline text-lg font-bold text-on-surface-variant">€ 13,800</span>
+</div>
+<!-- History Item -->
+<div class="flex justify-between items-center py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant font-bold text-xs">GK</div>
+<div class="flex flex-col">
+<span class="font-body text-sm font-semibold text-on-background">G. Klein</span>
+<span class="font-label text-xs text-on-surface-variant">Yesterday, 18:40</span>
+</div>
+</div>
+<span class="font-headline text-lg font-bold text-on-surface-variant">€ 12,000</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low font-body text-xs uppercase tracking-widest mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-12 border-t border-transparent max-w-screen-2xl mx-auto gap-8">
+<div class="font-headline font-bold text-primary-container text-base normal-case tracking-normal">
+                aste_online
+            </div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="text-on-surface-variant hover:text-primary-container underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary-container underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary-container underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Auction Rules</a>
+<a class="text-on-surface-variant hover:text-primary-container underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Help Center</a>
+</nav>
+<div class="text-on-surface-variant text-[10px]">
+                © 2024 aste_online. The Curated Gallery.
+            </div>
+</div>
+</footer>
+</body></html>

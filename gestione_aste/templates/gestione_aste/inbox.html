@@ -1,35 +1,90 @@
 {% extends "gestione_aste/base.html" %}
 
 {% block content %}
-<h2>La tua Posta in Arrivo</h2>
-<p style="color: #666; margin-top: -10px; margin-bottom: 20px;">Gestisci le tue comunicazioni divise per asta e acquirente/venditore.</p>
+<div class="mb-12 border-b border-surface-container-high pb-6">
+    <h1 class="font-headline text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tighter mb-4">I Tuoi Messaggi</h1>
+    <p class="font-body text-on-surface-variant text-lg max-w-2xl">Gestisci le tue comunicazioni divisi per asta e acquirente/venditore.</p>
+</div>
 
-<div style="display: flex; flex-direction: column; gap: 15px;">
-    {% for conv in conversazioni %}
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background-color: #fafafa;">
-        <h4 style="margin-top: 0; margin-bottom: 5px;">
-            Asta: <a href="{% url 'dettaglio_asta' conv.asta.id %}" style="color: #0056b3; text-decoration: none;">{{ conv.asta.titolo }}</a>
-        </h4>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <p style="margin: 0; font-weight: bold; color: #333;">Chat con: {{ conv.altro_utente.username }}</p>
-                <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #555;">
-                    <em>Ultimo msg:</em> "{{ conv.ultimo_messaggio.contenuto }}"
-                </p>
-                <p style="margin: 2px 0 0 0; font-size: 0.8em; color: #999;">
-                    Inviato il: {{ conv.ultimo_messaggio.data_invio|date:"d/m/Y H:i" }}
-                </p>
-            </div>
-            <div>
-                <a href="{% url 'chat' conv.asta.id conv.altro_utente.id %}" 
-                   style="display: inline-block; background-color: #28a745; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">
-                    Apri Chat
-                </a>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Sidebar / Filters -->
+    <aside class="lg:col-span-3">
+        <div class="bg-surface-container-low rounded-xl p-6 sticky top-24 shadow-sm border border-outline-variant/15">
+            <h2 class="font-headline text-xl font-bold mb-6 text-on-surface">Filtra Conversazioni</h2>
+            <div class="space-y-4">
+                <div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-lowest shadow-sm cursor-pointer border border-outline-variant/15">
+                    <span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">inbox</span>
+                    <span class="font-label font-medium text-sm text-on-surface">Tutti i Messaggi</span>
+                    <span class="ml-auto bg-primary-container text-on-primary text-xs py-0.5 px-2 rounded-full">{{ conversazioni|length }}</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container-lowest cursor-pointer transition-colors text-on-surface-variant">
+                    <span class="material-symbols-outlined">sell</span>
+                    <span class="font-label font-medium text-sm">Le Mie Aste</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container-lowest cursor-pointer transition-colors text-on-surface-variant">
+                    <span class="material-symbols-outlined">gavel</span>
+                    <span class="font-label font-medium text-sm">Le Mie Offerte</span>
+                </div>
+                <!-- Non sono integrati a livello backend questi filtri, ma li mostriamo disabilitati per layout -->
             </div>
         </div>
-    </div>
-    {% empty %}
-    <p style="text-align: center; color: #888; font-style: italic; padding: 20px;">Nessuna conversazione ancora iniziata.</p>
-    {% endfor %}
+    </aside>
+
+    <!-- Inbox List -->
+    <section class="lg:col-span-9 space-y-6">
+        {% for conv in conversazioni %}
+        <article class="bg-surface-container-lowest rounded-xl p-6 flex flex-col md:flex-row gap-6 relative group border border-outline-variant/15 transition-all hover:shadow-[0_4px_16px_rgba(26,28,28,0.04)]">
+            
+            <!-- Pallino indicatore (fittizio, solo grafico per layout per ora) -->
+            <div class="absolute top-6 left-4 w-2 h-2 bg-primary-container rounded-full hidden"></div>
+            
+            <!-- Immagine dell'Asta -->
+            <div class="w-24 h-24 flex-shrink-0 bg-surface-container-low rounded-lg overflow-hidden hidden md:flex items-center justify-center">
+                {% if conv.asta.immagine %}
+                <img alt="{{ conv.asta.titolo }}" class="w-full h-full object-cover" src="{{ conv.asta.immagine.url }}"/>
+                {% else %}
+                <span class="material-symbols-outlined text-surface-variant text-4xl">image</span>
+                {% endif %}
+            </div>
+            
+            <!-- Contenuto Messaggio -->
+            <div class="flex-grow flex flex-col justify-center">
+                <div class="flex justify-between items-start mb-2 pl-4 md:pl-0">
+                    <div>
+                        <span class="font-label text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-1 block hover:text-primary-container transition-colors">
+                            <a href="{% url 'dettaglio_asta' conv.asta.id %}">Asta: {{ conv.asta.titolo|truncatechars:35 }}</a>
+                        </span>
+                        <h3 class="font-headline text-xl font-bold text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm text-on-surface-variant">person</span>
+                            {{ conv.altro_utente.username }}
+                        </h3>
+                    </div>
+                    <span class="font-label text-sm text-on-surface-variant whitespace-nowrap">{{ conv.ultimo_messaggio.data_invio|date:"d/m/Y H:i" }}</span>
+                </div>
+                
+                <p class="font-body text-sm text-on-surface-variant font-medium mb-4 pl-4 md:pl-0 line-clamp-2">
+                    {% if conv.ultimo_messaggio.mittente == request.user %}
+                        <span class="text-xs uppercase bg-surface-container-high px-1.5 py-0.5 rounded mr-1">Tu</span>
+                    {% endif %}
+                    {{ conv.ultimo_messaggio.contenuto }}
+                </p>
+            </div>
+            
+            <!-- Pulsante Azione -->
+            <div class="flex-shrink-0 flex items-center md:items-end justify-end pl-4 md:pl-0 mt-4 md:mt-0">
+                <a href="{% url 'chat' conv.asta.id conv.altro_utente.id %}" class="bg-gradient-to-br from-primary to-primary-container text-on-primary font-label text-sm font-bold py-2.5 px-6 rounded-md shadow-sm hover:opacity-90 transition-opacity flex items-center gap-2">
+                    Apri Chat
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="bg-surface-container-lowest p-12 rounded-xl text-center border border-outline-variant/15 flex flex-col items-center">
+            <span class="material-symbols-outlined text-6xl text-surface-variant mb-4 pointer-events-none">forum</span>
+            <h3 class="font-headline text-xl font-bold text-on-surface mb-2">Nessuna conversazione attiva</h3>
+            <p class="font-body text-sm text-on-surface-variant">Quando contatterai un venditore o verrai contattato per le tue aste, i messaggi appariranno qui.</p>
+        </div>
+        {% endfor %}
+    </section>
 </div>
 {% endblock %}

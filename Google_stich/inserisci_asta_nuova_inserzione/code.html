@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Auction - aste_online</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8c7071",
+                        "on-secondary-container": "#79363b",
+                        "on-secondary-fixed": "#3b070e",
+                        "on-tertiary-container": "#7cb0c0",
+                        "on-tertiary-fixed": "#001f26",
+                        "secondary-fixed-dim": "#ffb3b5",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eeeeee",
+                        "tertiary-fixed": "#b6ebfb",
+                        "surface-container-low": "#f3f3f3",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-tint": "#af2b3e",
+                        "background": "#f9f9f9",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f1f1f1",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#ffdada",
+                        "primary-container": "#800020",
+                        "surface-variant": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "surface": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dadada",
+                        "secondary-fixed": "#ffdada",
+                        "on-primary-fixed": "#40000b",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary-container": "#ff828a",
+                        "tertiary-fixed-dim": "#9acfde",
+                        "inverse-primary": "#ffb3b5",
+                        "secondary-container": "#fda3a6",
+                        "on-surface-variant": "#584141",
+                        "on-background": "#1a1c1c",
+                        "tertiary-container": "#004451",
+                        "primary": "#570013",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#002c36",
+                        "secondary": "#90494d",
+                        "outline-variant": "#e0bfbf",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#743237",
+                        "on-primary-fixed-variant": "#8e0f28",
+                        "inverse-surface": "#2f3131",
+                        "primary-fixed-dim": "#ffb3b5",
+                        "on-tertiary-fixed-variant": "#114d5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.background');
+            color: theme('colors.on-surface');
+        }
+        h1, h2, h3, h4, h5, h6, .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-background text-on-surface font-body">
+<!-- TopNavBar -->
+<nav class="bg-[#f9f9f9] dark:bg-zinc-950 font-['Manrope'] text-sm tracking-tight docked full-width top-0 z-50 flat no-shadows border-none w-full border-b-0 shadow-none">
+<div class="flex justify-between items-center w-full px-8 py-6 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<a class="text-2xl font-extrabold tracking-tighter text-[#800020] dark:text-zinc-100" href="#">aste_online</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-zinc-500 dark:text-zinc-400 font-medium hover:text-[#800020] dark:hover:text-[#e00038] transition-all duration-300" href="#">Explore</a>
+<a class="text-zinc-500 dark:text-zinc-400 font-medium hover:text-[#800020] dark:hover:text-[#e00038] transition-all duration-300" href="#">Live Auctions</a>
+<a class="text-[#800020] dark:text-[#e00038] font-bold border-b-2 border-[#800020] pb-1 hover:text-[#800020] dark:hover:text-[#e00038] transition-all duration-300" href="#">Sell</a>
+<a class="text-zinc-500 dark:text-zinc-400 font-medium hover:text-[#800020] dark:hover:text-[#e00038] transition-all duration-300" href="#">Artists</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant/30 rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-primary-container w-48 lg:w-64" placeholder="Search..." type="text"/>
+</div>
+<button class="hidden md:block px-5 py-2 text-[#800020] dark:text-[#b0002c] font-semibold text-sm hover:opacity-80 transition-opacity">Login</button>
+<button class="bg-primary-container text-on-primary px-5 py-2.5 rounded-md font-semibold text-sm hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(128,0,32,0.15)] bg-gradient-to-br from-primary to-primary-container">Create Auction</button>
+<img alt="User profile" class="w-10 h-10 rounded-full border border-surface-container-low hidden lg:block object-cover" data-alt="A minimal, sophisticated portrait of a user in monochrome tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqcLKBK1ZlJsKcw5A-nPul3dFKtzm1Vvv-ov59TYs5gIKep_XSXRxyive2ZJUaZWcM95DZRo_SIo0RE7vBZzBme9hmjnQEZPj8tHRAwzTOs3LOiWeZQgTe8m9Eetu5MT856lsQea5KokqiixPgUqdgRWJ1e3L2KadbJHMpocu4hH5DF1csSIjvOM2l8JsjAUqRgXLr4lDFd67TK682bduzlq6l3TMVY_t0XGEHVSof6LTQpiKngJTEvbjl7gQe6984gvKzyDRcAEA"/>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl w-full bg-surface-container-lowest rounded-xl p-8 sm:p-12 relative overflow-hidden">
+<!-- Decorative minimal background accent -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary-container opacity-[0.03] rounded-full blur-3xl pointer-events-none"></div>
+<div class="text-center mb-10">
+<h1 class="text-4xl font-extrabold text-on-surface font-headline mb-3 tracking-tight">Inserisci Nuova Asta</h1>
+<p class="text-on-surface-variant font-body text-sm max-w-xl mx-auto">Prepare your masterpiece for the global stage. Ensure all details are accurate to attract premium bidders.</p>
+</div>
+<form class="space-y-8">
+<!-- Title & Category -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface font-label" for="title">Titolo dell'oggetto</label>
+<input class="w-full bg-surface-container-lowest border-outline-variant/40 rounded-lg px-4 py-3 text-on-surface focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm" id="title" placeholder="Es. Orologio Vintage" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface font-label" for="category">Categoria</label>
+<select class="w-full bg-surface-container-lowest border-outline-variant/40 rounded-lg px-4 py-3 text-on-surface focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm appearance-none" id="category">
+<option disabled="" selected="" value="">Seleziona una categoria</option>
+<option value="antiques">Antiques</option>
+<option value="watches">Watches</option>
+<option value="jewelry">Jewelry</option>
+<option value="fine_art">Fine Art</option>
+</select>
+</div>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface font-label" for="description">Descrizione</label>
+<div class="border border-outline-variant/40 rounded-lg overflow-hidden bg-surface-container-lowest focus-within:ring-1 focus-within:ring-primary-container focus-within:border-primary-container transition-all shadow-sm">
+<div class="bg-surface-container-low px-3 py-2 border-b border-outline-variant/20 flex gap-2">
+<button class="p-1 text-on-surface-variant hover:text-on-surface transition-colors rounded" type="button"><span class="material-symbols-outlined text-[20px]">format_bold</span></button>
+<button class="p-1 text-on-surface-variant hover:text-on-surface transition-colors rounded" type="button"><span class="material-symbols-outlined text-[20px]">format_italic</span></button>
+<button class="p-1 text-on-surface-variant hover:text-on-surface transition-colors rounded" type="button"><span class="material-symbols-outlined text-[20px]">format_list_bulleted</span></button>
+</div>
+<textarea class="w-full border-none focus:ring-0 px-4 py-3 text-on-surface resize-y" id="description" placeholder="Fornisci dettagli precisi sulla storia, le condizioni e la provenienza dell'oggetto..." rows="5"></textarea>
+</div>
+</div>
+<!-- Image Upload -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface font-label">Immagine Principale</label>
+<div class="border-2 border-dashed border-outline-variant/40 rounded-xl p-8 text-center bg-surface hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col items-center justify-center min-h-[200px]">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+<span class="material-symbols-outlined text-primary-container text-3xl">cloud_upload</span>
+</div>
+<p class="text-on-surface font-semibold mb-1">Trascina l'immagine qui</p>
+<p class="text-on-surface-variant text-xs mb-4">oppure clicca per selezionare (Max 10MB, JPG/PNG ad alta risoluzione)</p>
+<button class="px-4 py-2 border border-outline-variant rounded-md text-sm font-medium text-on-surface hover:bg-surface-container-lowest transition-colors" type="button">Scegli File</button>
+</div>
+</div>
+<!-- Price & Date -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface-container-high p-6 rounded-xl">
+<div class="space-y-2 relative">
+<label class="block text-sm font-semibold text-on-surface font-label" for="price">Prezzo di Partenza</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-headline font-semibold">€</span>
+<input class="w-full bg-surface-container-lowest border-transparent rounded-lg pl-10 pr-4 py-3 text-on-surface font-headline text-lg focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm" id="price" min="0" placeholder="0.00" step="100" type="number"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-surface font-label" for="date">Data di Scadenza</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-transparent rounded-lg px-4 py-3 text-on-surface focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm" id="date" type="datetime-local"/>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row-reverse items-center gap-4">
+<button class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-lg font-bold font-headline text-base hover:opacity-90 transition-opacity shadow-[0_4px_16px_rgba(128,0,32,0.2)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container" type="submit">
+                        Pubblica Asta
+                    </button>
+<button class="w-full sm:w-auto px-8 py-3.5 border border-outline-variant text-on-surface rounded-lg font-semibold font-headline text-base hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container bg-surface-container-lowest" type="button">
+                        Salva come Bozza
+                    </button>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f3f3f3] dark:bg-zinc-900 font-['Inter'] text-xs uppercase tracking-widest full-width mt-auto no-border tonal-shift flat border-none border-t-0 shadow-none">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-12 max-w-screen-2xl mx-auto gap-8 md:gap-0">
+<div class="text-lg font-bold text-zinc-900 dark:text-zinc-100">aste_online</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Help Center</a>
+<a class="text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">About Us</a>
+</div>
+<div class="text-zinc-400 dark:text-zinc-500 opacity-80 hover:opacity-100">
+                © 2024 aste_online. The Curated Gallery.
+            </div>
+</div>
+</footer>
+</body></html>

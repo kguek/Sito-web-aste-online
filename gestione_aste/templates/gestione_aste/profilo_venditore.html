@@ -1,44 +1,118 @@
 {% extends "gestione_aste/base.html" %}
 
 {% block content %}
-<h2>Profilo di {{ venditore.username }}</h2>
+<div class="w-full flex flex-col gap-12 py-8">
+    <!-- Profilo Venditore Header -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Info Card -->
+        <div class="lg:col-span-2 bg-surface-container-lowest rounded-xl p-8 sm:p-10 flex flex-col sm:flex-row items-center sm:items-start gap-8 shadow-sm border border-outline-variant/15 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-2 h-full bg-primary-container"></div>
+            <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-full shadow-md border-4 border-surface bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-6xl text-primary-container">person</span>
+            </div>
+            
+            <div class="flex flex-col flex-grow text-center sm:text-left">
+                <h1 class="text-4xl font-headline font-bold text-on-surface mb-2">Profilo di {{ venditore.username }}</h1>
+                <p class="text-on-surface-variant font-body text-sm mb-6 uppercase tracking-widest font-semibold italic">Venditore Verificato</p>
+                
+                <div class="flex flex-wrap justify-center sm:justify-start gap-8 mt-auto pt-4 border-t border-outline-variant/10">
+                    <div>
+                        <p class="text-xs font-label text-on-surface-variant uppercase tracking-wider mb-1">Affidabilità</p>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-2xl font-headline font-bold text-primary-container">{{ media_voto }}</span>
+                            <span class="material-symbols-outlined text-primary-container text-xl" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="text-sm text-on-surface-variant font-medium">/ 5.0</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-label text-on-surface-variant uppercase tracking-wider mb-1">Aste Totali</p>
+                        <p class="text-2xl font-headline font-bold text-on-surface">{{ aste_attive.count }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div style="background-color: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-    <strong>Affidabilità Venditore:</strong>
-    {% if media_voto > 0 %}
-    {{ media_voto }} su 5.0 ⭐
-    {% else %}
-    <em>Nessuna recensione ancora.</em>
-    {% endif %}
+        <!-- Call to Action / Stats Quick Info -->
+        <div class="bg-surface-container-high rounded-xl p-8 flex flex-col justify-center items-center text-center border border-outline-variant/10">
+            <span class="material-symbols-outlined text-5xl text-on-surface-variant/30 mb-4">verified_user</span>
+            <p class="font-body text-on-surface-variant text-sm leading-relaxed">
+                Questo venditore ha superato i controlli di sicurezza della community ed è attivo dal {{ venditore.date_joined|date:"Y" }}.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contenuto: Recensioni e Aste -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        <!-- Recensioni Ricevute -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-headline font-bold text-on-surface flex items-center gap-3 border-b border-outline-variant/20 pb-4">
+                <span class="material-symbols-outlined text-primary-container">rate_review</span>
+                Recensioni Ricevute
+            </h2>
+            
+            <div class="space-y-4">
+                {% for recensione in venditore.recensioni_ricevute.all %}
+                <div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 shadow-sm group">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-1">
+                            {% for i in "12345" %}
+                                <span class="material-symbols-outlined text-sm {% if forloop.counter <= recensione.voto %}text-primary-container{% else %}text-surface-variant{% endif %}" style="font-variation-settings: 'FILL' 1;">star</span>
+                            {% endfor %}
+                        </div>
+                        <span class="text-xs text-on-surface-variant font-label">{{ recensione.data_recensione|date:"d M Y" }}</span>
+                    </div>
+                    
+                    <p class="font-body text-on-surface text-sm leading-relaxed mb-4 italic italic text-on-surface-variant/90">
+                        "{{ recensione.commento|default:'L\'utente non ha inserito un commento testuale.' }}"
+                    </p>
+                    
+                    <div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+                        <span class="text-xs font-label text-on-surface-variant">Scritta da <strong class="text-on-surface">{{ recensione.autore.username }}</strong></span>
+                        <span class="text-[10px] uppercase font-bold text-on-surface-variant/60 bg-surface-container-high px-2 py-0.5 rounded">Oggetto: {{ recensione.asta.titolo|truncatechars:20 }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="bg-surface-container-low p-10 rounded-xl text-center border border-dashed border-outline-variant/30">
+                    <p class="text-on-surface-variant font-medium italic">Nessun feedback ancora disponibile per questo utente.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Aste Attive del Venditore -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-headline font-bold text-on-surface flex items-center gap-3 border-b border-outline-variant/20 pb-4">
+                <span class="material-symbols-outlined text-primary-container">gavel</span>
+                Aste in Corso
+            </h2>
+            
+            <div class="grid grid-cols-1 gap-4">
+                {% for asta in aste_attive %}
+                <a href="{% url 'dettaglio_asta' asta.pk %}" class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/15 shadow-sm hover:shadow-md hover:border-primary-container/30 transition-all flex items-center gap-4 group">
+                    <div class="w-16 h-16 bg-surface-container rounded-lg overflow-hidden flex-shrink-0">
+                        {% if asta.immagine %}
+                        <img src="{{ asta.immagine.url }}" class="w-full h-full object-cover">
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center">
+                            <span class="material-symbols-outlined text-surface-variant">image</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-headline font-bold text-on-surface group-hover:text-primary-container transition-colors">{{ asta.titolo }}</h4>
+                        <p class="text-xs text-on-surface-variant mt-1">Prezzo attuale: <span class="font-bold text-on-surface">{{ asta.prezzo_corrente|floatformat:2 }} €</span></p>
+                    </div>
+                    <span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                </a>
+                {% empty %}
+                <div class="bg-surface-container-low p-10 rounded-xl text-center border border-dashed border-outline-variant/30">
+                    <p class="text-on-surface-variant font-medium italic">Questo utente non ha aste attive al momento.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        
+    </div>
 </div>
-
-
-<hr>
-
-<h3>Recensioni Ricevute</h3>
-<ul>
-    {% for recensione in venditore.recensioni_ricevute.all %}
-    <li>
-        <strong>{{ recensione.voto }} ⭐</strong> - "{{ recensione.commento|default:'Senza commento' }}"
-        <br>
-        <span style="font-size: 0.9em; color: #666;">
-            (Acquisto: <strong>{{ recensione.asta.titolo|default:'Non specificato' }}</strong>)
-            - <em>Scritta da {{ recensione.autore.username }} il {{ recensione.data_recensione|date:"d/m/Y" }}</em>
-        </span>
-    </li>
-    {% empty %}
-    <p>Nessuno ha ancora recensito questo utente.</p>
-    {% endfor %}
-</ul>
-
-<hr>
-
-<h3>Aste di {{ venditore.username }}</h3>
-<ul>
-    {% for asta in aste_attive %}
-    <li><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a> - {{ asta.prezzo_iniziale }} €</li>
-    {% empty %}
-    <p>Nessuna asta attiva al momento.</p>
-    {% endfor %}
-</ul>
 {% endblock %}

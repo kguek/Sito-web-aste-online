@@ -2,59 +2,172 @@
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Gestione Aste</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gestione Aste - aste_online</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#ff828a",
+                        "on-tertiary-fixed": "#001f26",
+                        "primary": "#570013",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb3b5",
+                        "surface-container": "#eeeeee",
+                        "secondary": "#90494d",
+                        "on-primary-fixed-variant": "#8e0f28",
+                        "on-background": "#1a1c1c",
+                        "on-secondary-fixed": "#3b070e",
+                        "background": "#f9f9f9",
+                        "surface-tint": "#af2b3e",
+                        "secondary-fixed": "#ffdada",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#584141",
+                        "inverse-primary": "#ffb3b5",
+                        "surface-variant": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#004451",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#79363b",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#002c36",
+                        "on-tertiary-container": "#7cb0c0",
+                        "primary-fixed-dim": "#ffb3b5",
+                        "on-secondary-fixed-variant": "#743237",
+                        "secondary-container": "#fda3a6",
+                        "surface-dim": "#dadada",
+                        "outline-variant": "#e0bfbf",
+                        "tertiary-fixed-dim": "#9acfde",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-low": "#f3f3f3",
+                        "inverse-on-surface": "#f1f1f1",
+                        "primary-fixed": "#ffdada",
+                        "primary-container": "#800020",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#40000b",
+                        "inverse-surface": "#2f3131",
+                        "outline": "#8c7071",
+                        "tertiary-fixed": "#b6ebfb",
+                        "on-tertiary-fixed-variant": "#114d5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": [
+                            "Manrope"
+                        ],
+                        "body": [
+                            "Inter"
+                        ],
+                        "label": [
+                            "Inter"
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
 </head>
 
-<body>
-    <header>
-        <h1>Sito Aste online</h1>
-        <nav>
-            <a href="/">Home</a>
-            {% if request.user.is_authenticated %}
-            <p>Benvenuto <strong>{{request.user.username}}</strong>,</p>
-            <a href="{% url 'asta-nuova' %}"> Inserisci Asta</a>|
-            <a href="{% url 'area_personale' %}">Area Personale</a>|
-            <a href="{% url 'inbox' %}">Messaggi</a>|
-            <a href="{% url 'aste_preferite' %}">Wishlist</a>
-            <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <input type="submit" value="Logout">
-            </form>
-            {% else %}
-            <a href="{% url 'login' %}">Login</a> |
-            <a href="{% url 'registrazione' %}">Registrazione</a>
-            {% endif %}
-        </nav>
-        <div style="margin-top: 15px; padding: 10px; background-color: #e9ecef; border-radius: 5px;">
-            <form method="get" action="{% url 'home' %}"
-                style="margin: 0; display: flex; gap: 10px; align-items: center;">
-                <label for="q">Cerca:</label>
-                <input type="text" name="q" id="q" placeholder="Cosa cerchi?" value="{{ request.GET.q }}">
-
-                <label for="categoria">Categoria:</label>
-                <select name="categoria" id="categoria">
-                    <option value="">Tutte le categorie</option>
-                    {% for cat in categorie_globali %}
-                    {% if request.GET.categoria == cat.id|stringformat:"s" %}
-                    <option value="{{ cat.id }}" selected>{{ cat.nome }}</option>
+<body
+    class="bg-surface text-on-surface font-body antialiased selection:bg-primary-container selection:text-white min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <nav class="bg-white dark:bg-zinc-950 sticky top-0 w-full z-50 shadow-sm border-b border-outline-variant/10">
+        <div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+            <!-- Brand -->
+            <a class="font-['Manrope'] text-2xl font-extrabold tracking-tighter text-[#800020] dark:text-white uppercase flex items-center gap-2 scale-95 duration-200 ease-in-out"
+                href="{% url 'home' %}">
+                <span>aste_online</span>
+            </a>
+            <!-- Navigation Links (Web) -->
+            <div class="hidden md:flex items-center gap-8 font-['Manrope'] text-sm tracking-tight font-medium">
+                <a class="text-[#800020] dark:text-red-400 font-bold border-b-2 border-[#800020] pb-1 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="{% url 'home' %}">Home</a>
+                {% if request.user.is_authenticated %}
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="{% url 'asta-nuova' %}">Inserisci Asta</a>
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="{% url 'area_personale' %}">Area Personale</a>
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="{% url 'inbox' %}">Messaggi</a>
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="{% url 'aste_preferite' %}">Preferiti</a>
+                {% endif %}
+            </div>
+            <!-- Actions (Search, Login, Logout) -->
+            <div class="flex items-center gap-6">
+                <!-- Search Icon (fallback) -->
+                <a href="{% url 'home' %}"
+                    class="text-[#800020] dark:text-red-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out p-2 rounded-full">
+                    <span class="material-symbols-outlined" data-icon="search">search</span>
+                </a>
+                <div class="hidden sm:flex items-center gap-4 font-['Manrope'] text-sm tracking-tight font-medium">
+                    {% if request.user.is_authenticated %}
+                    <span class="text-zinc-600 dark:text-zinc-400">Ciao, <strong>{{ request.user.username }}</strong></span>
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="text-[#800020] dark:text-red-400 font-semibold scale-95 duration-200 ease-in-out">
+                            Logout
+                        </button>
+                    </form>
                     {% else %}
-                    <option value="{{ cat.id }}">{{ cat.nome }}</option>
+                    <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors scale-95 duration-200 ease-in-out"
+                        href="{% url 'login' %}">Login</a>
+                    <a class="text-[#800020] dark:text-red-400 font-semibold scale-95 duration-200 ease-in-out"
+                        href="{% url 'registrazione' %}">Registrati</a>
                     {% endif %}
-                    {% endfor %}
-                </select>
-
-                <button type="submit">Filtra</button>
-            </form>
+                </div>
+            </div>
         </div>
-        <hr>
-    </header>
-    <main>
+    </nav>
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col pt-8 pb-12 w-full max-w-screen-2xl mx-auto px-8">
         {% block content %}
         {% endblock %}
     </main>
-    <footer>
-        <p>Gestione Aste</p>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low dark:bg-zinc-900 py-12 mt-auto border-t border-outline-variant/10">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center w-full px-12 border-t border-transparent max-w-screen-2xl mx-auto">
+            <!-- Brand/Copyright -->
+            <div class="mb-6 md:mb-0 flex flex-col items-center md:items-start">
+                <span class="font-['Manrope'] font-bold text-[#800020] text-lg mb-2">aste_online</span>
+                <span class="font-['Inter'] text-xs uppercase tracking-widest text-[#800020] dark:text-red-400">© 2026
+                    kguek.</span>
+            </div>
+            <!-- Footer Links -->
+            <div class="flex flex-wrap justify-center gap-6 font-['Inter'] text-xs uppercase tracking-widest">
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Termini di Servizio</a>
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Privacy Policy</a>
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Regole Aste</a>
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Centro Assistenza</a>
+            </div>
+        </div>
     </footer>
 </body>
 

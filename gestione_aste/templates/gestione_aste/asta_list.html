@@ -1,19 +1,128 @@
 {% extends 'gestione_aste/base.html' %}
 
 {% block content %}
-<h2>Aste in corso</h2>
-<ul>
-    {% for asta in aste %}
-    <li>
-        <strong>{{asta.titolo}}</strong> <br>
-        Prezzo offerta attuale: {{asta.prezzo_corrente}} € <br>
-        Scade il: {{asta.data_scadenza}} <br>
-        Venditore: {{asta.creatore.username}} <br>
-        <a href="{%url 'dettaglio_asta' asta.pk %}">Vedi Dettagli &rarr;</a>
-    </li>
-    <hr>
-    {% empty %}
-    <li>Nessuna asta attiva al momento.</li>
-    {% endfor %}
-</ul>
-{%endblock%}
+<!-- Sezione Hero & Ricerca -->
+<section class="bg-surface-container-low w-full pt-24 pb-32 px-8 relative overflow-hidden -mx-8 -mt-8 mb-12 rounded-b-3xl">
+    <!-- Elemento decorativo di sfondo -->
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-surface-container-high/50 to-transparent pointer-events-none"></div>
+    
+    <div class="max-w-screen-xl mx-auto relative z-10 flex flex-col items-center text-center">
+        <h1 class="font-headline text-5xl md:text-7xl font-extrabold text-on-surface mb-6 tracking-tighter leading-tight max-w-4xl">
+            Alla ricerca di <span class="text-primary-container">affari?</span>
+        </h1>
+        <p class="font-body text-on-surface-variant text-lg md:text-xl mb-12 max-w-2xl font-light">
+            Aste curate per collezionisti esigenti. Trova oggi il tuo prossimo capolavoro.
+        </p>
+        
+        <!-- Barra di Ricerca Prominente -->
+        <form method="get" action="{% url 'home' %}"
+            class="w-full max-w-3xl bg-surface-container-lowest rounded-full p-2 flex flex-col md:flex-row items-center shadow-[0_8px_32px_rgba(26,28,28,0.04)] border border-outline-variant/15 relative z-20 gap-2 md:gap-0">
+            
+            <div class="w-full md:w-auto pl-6 pr-4 py-3 flex items-center md:border-r border-surface-variant relative">
+                <span class="material-symbols-outlined text-on-surface-variant mr-2">category</span>
+                <select name="categoria"
+                    class="bg-transparent border-none text-on-surface font-body text-sm font-medium focus:ring-0 cursor-pointer appearance-none pr-8">
+                    <option value="">Tutte le categorie</option>
+                    {% for cat in categorie %}
+                        <option value="{{ cat.id }}" {% if request.GET.categoria == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nome }}</option>
+                    {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-6 md:right-4 pointer-events-none text-on-surface-variant text-sm">expand_more</span>
+            </div>
+            
+            <input name="q" value="{{ request.GET.q|default_if_none:'' }}"
+                class="w-full md:flex-grow bg-transparent border-none text-on-surface font-body px-6 py-4 focus:ring-0 placeholder-on-surface-variant/50 text-base"
+                placeholder="Cerca aste..." type="text" />
+            
+            <button type="submit"
+                class="w-full md:w-auto bg-gradient-to-br from-primary to-primary-container text-white px-8 py-4 rounded-full font-headline font-bold text-sm tracking-wide hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">search</span>
+                Cerca
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Griglia Aste Attive -->
+<section class="w-full relative z-20">
+    <div class="max-w-screen-xl mx-auto">
+        <div class="flex justify-between items-end mb-16">
+            <div>
+                <h2 class="font-headline text-3xl font-extrabold text-on-surface mb-2 tracking-tight">Aste Attive</h2>
+                <p class="font-body text-on-surface-variant text-sm">Le offerte terminano presto su questi pezzi selezionati.</p>
+            </div>
+        </div>
+
+        <!-- Layout Griglia Bento -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for asta in aste %}
+            <article class="bg-surface-container-lowest rounded-xl p-6 flex flex-col relative group overflow-hidden border border-outline-variant/15 transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)] {% if forloop.first %}lg:col-span-2 md:flex-row gap-8 pb-8{% endif %}">
+                
+                <!-- Badge Stato -->
+                <div class="absolute top-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 z-10 border border-white/20 shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    <span class="font-label text-[10px] font-bold text-primary uppercase tracking-wider">Attiva</span>
+                </div>
+                
+                <!-- Immagine -->
+                <a href="{% url 'dettaglio_asta' asta.pk %}"
+                    class="{% if forloop.first %}w-full md:w-1/2 aspect-square md:aspect-auto{% else %}w-full aspect-square{% endif %} rounded-lg overflow-hidden mb-6 relative block">
+                    {% if asta.immagine %}
+                    <img alt="{{ asta.titolo }}"
+                        class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                        src="{{ asta.immagine.url }}" />
+                    {% else %}
+                    <div class="w-full h-full bg-surface-variant flex items-center justify-center transform group-hover:scale-105 transition-transform duration-700 ease-in-out">
+                        <span class="material-symbols-outlined text-outline text-4xl">image</span>
+                    </div>
+                    {% endif %}
+                </a>
+
+                <!-- Blocco Info -->
+                <div class="flex-grow flex flex-col {% if forloop.first %}w-full md:w-1/2 justify-center{% endif %}">
+                    {% if forloop.first %}<div class="mb-auto pt-4 md:pt-0">{% endif %}
+                        
+                        <span class="font-label text-[10px] font-semibold text-on-surface-variant uppercase tracking-widest mb-2 block">
+                            {% if asta.categoria %}{{ asta.categoria.nome }}{% else %}Senza Categoria{% endif %}
+                        </span>
+                        <h3 class="font-headline text-lg font-bold text-on-surface leading-snug mb-3 group-hover:text-primary-container transition-colors {% if forloop.first %}text-2xl mb-4{% endif %}">
+                            <a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a>
+                        </h3>
+                        
+                        {% if forloop.first %}
+                        <p class="font-body text-sm text-on-surface-variant mb-6 line-clamp-3">{{ asta.descrizione|truncatewords:20 }}</p>
+                        {% endif %}
+
+                        <div class="flex items-center gap-2 text-xs font-label text-on-surface-variant mb-6">
+                            <span class="material-symbols-outlined text-sm">storefront</span>
+                            <span>{{ asta.creatore.username }}</span>
+                        </div>
+                        
+                    {% if forloop.first %}</div>{% endif %}
+
+                    <div class="mt-auto pt-4 border-t border-surface-variant flex justify-between items-end">
+                        <div>
+                            <span class="font-label text-[10px] text-on-surface-variant block mb-1">Offerta Attuale</span>
+                            <span class="font-headline {% if forloop.first %}text-3xl{% else %}text-xl{% endif %} font-extrabold text-on-surface">{{ asta.prezzo_corrente|floatformat:2 }} €</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-label text-[10px] text-error block mb-1 flex items-center justify-end gap-1">
+                                <span class="material-symbols-outlined text-[10px]">schedule</span>
+                                Scade tra
+                            </span>
+                            <span class="font-headline text-sm font-bold text-on-surface">{{ asta.data_scadenza|timeuntil }}</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-20 text-on-surface-variant bg-surface-container-low rounded-2xl border border-outline-variant/20">
+                <span class="material-symbols-outlined text-6xl opacity-30 mb-4 block text-primary">search_off</span>
+                <p class="text-xl font-medium text-on-surface">Nessuna asta corrisponde ai criteri.</p>
+                <p class="mt-2 text-sm">Prova a modificare i filtri o il termine di ricerca.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

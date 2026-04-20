@@ -1,5 +1,6 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from .models import Asta, Offerta
 from django.utils import timezone
 from django.urls import reverse
@@ -37,6 +38,9 @@ class AstaModelTest(TestCase):
     def test_registrazione_nuovo_utente(self):
         response=self.client.post(reverse('registrazione'), {
             'username':'nuovoutente',
+            'first_name':'Mario',
+            'last_name':'Rossi',
+            'email':'mario@example.com',
             'password1':'UnaPasswordSicura123!',
             'password2':'UnaPasswordSicura123!',
         })
@@ -116,4 +120,4 @@ class AreaPersonaleTest(TestCase):
         self.assertIn(self.asta, response.context['aste_vinte'])
         
         self.assertContains(response, "50,00 €")
-        self.assertContains(response, "Ti sei aggiudicato l'oggetto per:")
+        self.assertContains(response, "Pagato")

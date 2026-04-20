@@ -1,10 +1,113 @@
 {% extends 'gestione_aste/base.html' %}
 
 {% block content %}
-<h2>Crea Nuova Asta</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Crea Asta">
-</form>
+<div class="flex-grow flex items-center justify-center py-8">
+    <div class="max-w-3xl w-full bg-surface-container-lowest rounded-xl p-8 sm:p-12 relative overflow-hidden shadow-sm border border-outline-variant/15">
+        <!-- Decorative minimal background accent -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-primary-container opacity-[0.03] rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-on-surface font-headline mb-3 tracking-tight">Inserisci Nuova Asta</h1>
+            <p class="text-on-surface-variant font-body text-sm max-w-xl mx-auto">Prepara il tuo oggetto per il palcoscenico globale. Assicurati che tutti i dettagli siano accurati per attrarre acquirenti premium.</p>
+        </div>
+        
+        <!-- Mostra Errori Generali Form se presenti -->
+        {% if form.non_field_errors %}
+        <div class="bg-error-container text-on-error-container p-4 rounded-lg mb-6 text-sm font-semibold border border-error/20">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+            
+            <!-- Title & Category -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Titolo -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-on-surface font-label" for="{{ form.titolo.id_for_label }}">Titolo dell'oggetto</label>
+                    {{ form.titolo }}
+                    {% if form.titolo.errors %}
+                        <p class="text-error text-xs font-semibold">{{ form.titolo.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Categoria -->
+                <div class="space-y-2 relative">
+                    <label class="block text-sm font-semibold text-on-surface font-label" for="{{ form.categoria.id_for_label }}">Categoria</label>
+                    <div class="relative">
+                        {{ form.categoria }}
+                        <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-sm">expand_more</span>
+                    </div>
+                    {% if form.categoria.errors %}
+                        <p class="text-error text-xs font-semibold">{{ form.categoria.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Description -->
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-on-surface font-label" for="{{ form.descrizione.id_for_label }}">Descrizione</label>
+                <div class="border border-outline-variant/40 rounded-lg overflow-hidden bg-surface-container-lowest focus-within:ring-1 focus-within:ring-primary-container focus-within:border-primary-container transition-all shadow-sm">
+                    <div class="bg-surface-container-low px-3 py-2 border-b border-outline-variant/20 flex gap-2">
+                        <span class="p-1 text-on-surface-variant"><span class="material-symbols-outlined text-[20px]">format_align_left</span></span>
+                    </div>
+                    {{ form.descrizione }}
+                </div>
+                {% if form.descrizione.errors %}
+                    <p class="text-error text-xs font-semibold">{{ form.descrizione.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Image Upload -->
+            <div class="space-y-2">
+                <label class="block text-sm font-semibold text-on-surface font-label" for="{{ form.immagine.id_for_label }}">Immagine Principale</label>
+                <div class="border border-outline-variant/40 rounded-xl p-4 bg-surface hover:bg-surface-container-high transition-colors">
+                    {{ form.immagine }}
+                </div>
+                {% if form.immagine.errors %}
+                    <p class="text-error text-xs font-semibold">{{ form.immagine.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Price & Date -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface-container-high p-6 rounded-xl border border-outline-variant/15">
+                <!-- Prezzo di Partenza -->
+                <div class="space-y-2 relative">
+                    <label class="block text-sm font-semibold text-on-surface font-label" for="{{ form.prezzo_iniziale.id_for_label }}">Prezzo di Partenza</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-headline font-semibold flex items-center">€</span>
+                        {{ form.prezzo_iniziale }}
+                    </div>
+                    {% if form.prezzo_iniziale.errors %}
+                        <p class="text-error text-xs font-semibold">{{ form.prezzo_iniziale.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Data di Scadenza -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-on-surface font-label" for="{{ form.data_scadenza.id_for_label }}">Data di Scadenza</label>
+                    <div class="relative">
+                        {{ form.data_scadenza }}
+                    </div>
+                    {% if form.data_scadenza.errors %}
+                        <p class="text-error text-xs font-semibold">{{ form.data_scadenza.errors.0 }}</p>
+                    {% endif %}
+                    <p class="text-xs text-on-surface-variant">L'asta terminerà automaticamente in questa data.</p>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row-reverse items-center justify-between gap-4">
+                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-lg font-bold font-headline text-base hover:opacity-90 transition-opacity shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container">
+                    Pubblica Asta
+                </button>
+                <a href="{% url 'home' %}" class="w-full sm:w-auto px-8 py-3.5 border border-outline-variant text-on-surface text-center rounded-lg font-semibold font-headline text-base hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container bg-surface-container-lowest">
+                    Annulla
+                </a>
+            </div>
+            
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Homepage - aste_online</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#ff828a",
+                        "on-tertiary-fixed": "#001f26",
+                        "primary": "#570013",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb3b5",
+                        "surface-container": "#eeeeee",
+                        "secondary": "#90494d",
+                        "on-primary-fixed-variant": "#8e0f28",
+                        "on-background": "#1a1c1c",
+                        "on-secondary-fixed": "#3b070e",
+                        "background": "#f9f9f9",
+                        "surface-tint": "#af2b3e",
+                        "secondary-fixed": "#ffdada",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#584141",
+                        "inverse-primary": "#ffb3b5",
+                        "surface-variant": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#004451",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#79363b",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#002c36",
+                        "on-tertiary-container": "#7cb0c0",
+                        "primary-fixed-dim": "#ffb3b5",
+                        "on-secondary-fixed-variant": "#743237",
+                        "secondary-container": "#fda3a6",
+                        "surface-dim": "#dadada",
+                        "outline-variant": "#e0bfbf",
+                        "tertiary-fixed-dim": "#9acfde",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-low": "#f3f3f3",
+                        "inverse-on-surface": "#f1f1f1",
+                        "primary-fixed": "#ffdada",
+                        "primary-container": "#800020",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#40000b",
+                        "inverse-surface": "#2f3131",
+                        "outline": "#8c7071",
+                        "tertiary-fixed": "#b6ebfb",
+                        "on-tertiary-fixed-variant": "#114d5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": [
+                            "Manrope"
+                        ],
+                        "body": [
+                            "Inter"
+                        ],
+                        "label": [
+                            "Inter"
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-surface text-on-surface font-body antialiased selection:bg-primary-container selection:text-white min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <nav
+        class="bg-white dark:bg-zinc-950 docked full-width top-0 w-full z-50 bg-[#f3f3f3] dark:bg-zinc-900 flat no shadows border-none sticky">
+        <div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+            <!-- Brand -->
+            <a class="font-['Manrope'] text-2xl font-extrabold tracking-tighter text-[#800020] dark:text-white uppercase flex items-center gap-2 scale-95 duration-200 ease-in-out"
+                href="#">
+                <span>aste_online</span>
+            </a>
+            <!-- Navigation Links (Web) -->
+            <div class="hidden md:flex items-center gap-8 font-['Manrope'] text-sm tracking-tight font-medium">
+                <a class="text-[#800020] dark:text-red-400 font-bold border-b-2 border-[#800020] pb-1 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="#">Home</a>
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="#">Insert Auction</a>
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="#">Personal Area</a>
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="#">Messages</a>
+                <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out"
+                    href="#">Wishlist</a>
+            </div>
+            <!-- Actions (Search, Login, Logout) -->
+            <div class="flex items-center gap-6">
+                <!-- Search Icon (Mobile/Tablet fallback or right-aligned) -->
+                <button
+                    class="text-[#800020] dark:text-red-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all duration-300 scale-95 duration-200 ease-in-out p-2 rounded-full">
+                    <span class="material-symbols-outlined" data-icon="search">search</span>
+                </button>
+                <div class="hidden sm:flex items-center gap-4 font-['Manrope'] text-sm tracking-tight font-medium">
+                    <a class="text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors scale-95 duration-200 ease-in-out"
+                        href="#">Login</a>
+                    <a class="text-[#800020] dark:text-red-400 font-semibold scale-95 duration-200 ease-in-out"
+                        href="#">Logout</a>
+                </div>
+                <!-- Mobile Menu Toggle -->
+                <button class="md:hidden text-[#800020] dark:text-red-400 p-2">
+                    <span class="material-symbols-outlined" data-icon="menu">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col">
+        <!-- Hero & Search Section -->
+        <section class="bg-surface-container-low w-full pt-24 pb-32 px-8 relative overflow-hidden">
+            <!-- Decorative background element -->
+            <div
+                class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-surface-container-high/50 to-transparent pointer-events-none">
+            </div>
+            <div class="max-w-screen-xl mx-auto relative z-10 flex flex-col items-center text-center">
+                <h1
+                    class="font-headline text-5xl md:text-7xl font-extrabold text-on-surface mb-6 tracking-tighter leading-tight max-w-4xl">
+                    Discover the <span class="text-primary-container">Extraordinary</span>
+                </h1>
+                <p class="font-body text-on-surface-variant text-lg md:text-xl mb-12 max-w-2xl font-light">
+                    Curated auctions for discerning collectors. Find your next masterpiece today.
+                </p>
+                <!-- Prominent Search Bar -->
+                <div
+                    class="w-full max-w-3xl bg-surface-container-lowest rounded-full p-2 flex items-center shadow-[0_8px_32px_rgba(26,28,28,0.04)] border border-outline-variant/15 relative z-20">
+                    <div class="pl-6 pr-4 py-3 flex items-center border-r border-surface-variant">
+                        <span class="material-symbols-outlined text-on-surface-variant mr-2"
+                            data-icon="category">category</span>
+                        <select
+                            class="bg-transparent border-none text-on-surface font-body text-sm font-medium focus:ring-0 cursor-pointer appearance-none pr-8">
+                            <option>All Categories</option>
+                            <option>Fine Art</option>
+                            <option>Jewelry</option>
+                            <option>Antiques</option>
+                            <option>Watches</option>
+                        </select>
+                        <span
+                            class="material-symbols-outlined absolute left-[120px] pointer-events-none text-on-surface-variant text-sm"
+                            data-icon="expand_more">expand_more</span>
+                    </div>
+                    <input
+                        class="flex-grow bg-transparent border-none text-on-surface font-body px-6 py-4 focus:ring-0 placeholder-on-surface-variant/50 text-base"
+                        placeholder="Search for artists, items, or eras..." type="text" />
+                    <button
+                        class="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-4 rounded-full font-headline font-bold text-sm tracking-wide hover:opacity-90 transition-opacity flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+                        Search
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- Active Auctions Grid -->
+        <section class="w-full px-8 py-24 bg-surface relative -mt-12 z-20 rounded-t-[2rem]">
+            <div class="max-w-screen-xl mx-auto">
+                <div class="flex justify-between items-end mb-16">
+                    <div>
+                        <h2 class="font-headline text-3xl font-extrabold text-on-surface mb-2 tracking-tight">Active
+                            Auctions</h2>
+                        <p class="font-body text-on-surface-variant text-sm">Bidding ends soon on these curated pieces.
+                        </p>
+                    </div>
+                    <a class="font-headline text-primary-container font-semibold text-sm hover:underline underline-offset-4 flex items-center gap-1"
+                        href="#">
+                        View All <span class="material-symbols-outlined text-sm"
+                            data-icon="arrow_forward">arrow_forward</span>
+                    </a>
+                </div>
+                <!-- Bento Grid Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card 1: Featured (Spans 2 columns on lg) -->
+                    <article
+                        class="col-span-1 lg:col-span-2 bg-surface-container-lowest rounded-xl p-8 flex flex-col md:flex-row gap-8 relative group overflow-hidden border border-outline-variant/15 transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)]">
+                        <!-- Glassmorphism Status Badge -->
+                        <div
+                            class="absolute top-6 left-6 bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2 z-10 border border-white/20 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            <span
+                                class="font-label text-xs font-bold text-primary uppercase tracking-wider">Active</span>
+                        </div>
+                        <div class="w-full md:w-1/2 aspect-square md:aspect-auto rounded-xl overflow-hidden relative">
+                            <img alt="Abstract oil painting with vibrant colors"
+                                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                                data-alt="vibrant abstract oil painting with thick impasto texture, dynamic brushstrokes of crimson, gold, and deep blue, gallery lighting"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0jjDoDvyuf5YiKApRdAFGL2imq8lYqc4bhQTBy8Cb6eouyM_1sb1xIt7MNauhyeodbKAFfNi7WWhXMciu45wrIDdRYaK6VJXE25JYXeYHtaogxNrXOeoKW2HjVfEVrw7p4T_3A4MHTpqVVQCwFGI0_KgmWtqlKXd6pO5yluMfM1fp-2U9nzIWog-Gkh8dWkyEf-v5abZ8puB_XF8c-7x5t8wDVypwQmWq7OOZPb7doV0m00GzxWczd_hKkeVJ1clo4LDYKgKb-tg" />
+                        </div>
+                        <div class="w-full md:w-1/2 flex flex-col justify-center">
+                            <div class="mb-auto pt-4 md:pt-0">
+                                <span
+                                    class="font-label text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-3 block">Fine
+                                    Art</span>
+                                <h3
+                                    class="font-headline text-2xl font-bold text-on-surface leading-tight mb-4 group-hover:text-primary-container transition-colors">
+                                    "Echoes of the Mediterranean" - Original Oil on Canvas</h3>
+                                <p class="font-body text-sm text-on-surface-variant mb-6 line-clamp-3">A striking
+                                    mid-century piece utilizing bold color blocks and heavy texture to depict coastal
+                                    light. Signed by the artist lower right.</p>
+                                <div class="flex items-center gap-3 text-sm font-label text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-lg" data-icon="person">person</span>
+                                    <span>Seller: <strong class="text-on-surface font-medium">Gallery
+                                            Alpha</strong></span>
+                                </div>
+                            </div>
+                            <div class="mt-8 pt-6 border-t border-surface-variant flex justify-between items-end">
+                                <div>
+                                    <span class="font-label text-xs text-on-surface-variant block mb-1">Current
+                                        Bid</span>
+                                    <span class="font-headline text-3xl font-extrabold text-on-surface">1,250.00
+                                        €</span>
+                                </div>
+                                <div class="text-right">
+                                    <span
+                                        class="font-label text-xs text-error block mb-1 flex items-center justify-end gap-1">
+                                        <span class="material-symbols-outlined text-[10px]"
+                                            data-icon="schedule">schedule</span> Ends in
+                                    </span>
+                                    <span class="font-headline text-lg font-bold text-on-surface">02h 15m</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Card 2 -->
+                    <article
+                        class="bg-surface-container-lowest rounded-xl p-6 flex flex-col relative group overflow-hidden border border-outline-variant/15 transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)]">
+                        <div
+                            class="absolute top-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 z-10 border border-white/20 shadow-sm">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                            <span
+                                class="font-label text-[10px] font-bold text-primary uppercase tracking-wider">Active</span>
+                        </div>
+                        <div class="w-full aspect-square rounded-lg overflow-hidden mb-6 relative">
+                            <img alt="Vintage luxury watch"
+                                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                                data-alt="close up of a vintage luxury mechanical watch with leather strap resting on dark textured slate, dramatic top lighting highlighting the dial details"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF4cSDcH1s1yyuoPeyVfY81g8B9hpiLXQ99Pw8jX7Bl29oTtRny9ighpMYHI1fhjvUE2HCOPqB4kUM--EMU0aqU_4VEGHb3G5xpwn-PhQ2E64LugBTaHAzk4dB_HO0bba5lyRsDRymBBeRu_EdsJPHZnHFfPcLSNapzojaPOjWokDWPse4lbuHE-UIZZRGhmtllW0qiQVr6w1j1GgDzQIcjumAPdEXMF4NJEI6kL8IAjlK57MewlvKYmWI4-kTSovRyjthPQBiA0s" />
+                        </div>
+                        <div class="flex-grow flex flex-col">
+                            <span
+                                class="font-label text-[10px] font-semibold text-on-surface-variant uppercase tracking-widest mb-2 block">Watches</span>
+                            <h3
+                                class="font-headline text-lg font-bold text-on-surface leading-snug mb-3 group-hover:text-primary-container transition-colors">
+                                1968 Chronograph Stainless Steel</h3>
+                            <div class="flex items-center gap-2 text-xs font-label text-on-surface-variant mb-6">
+                                <span class="material-symbols-outlined text-sm" data-icon="storefront">storefront</span>
+                                <span>Horology House</span>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-surface-variant flex justify-between items-end">
+                                <div>
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Current
+                                        Bid</span>
+                                    <span class="font-headline text-xl font-extrabold text-on-surface">3,400.00 €</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Time
+                                        Left</span>
+                                    <span class="font-headline text-sm font-bold text-on-surface">14h 30m</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Card 3 -->
+                    <article
+                        class="bg-surface-container-lowest rounded-xl p-6 flex flex-col relative group overflow-hidden border border-outline-variant/15 transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)]">
+                        <div
+                            class="absolute top-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 z-10 border border-white/20 shadow-sm">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                            <span
+                                class="font-label text-[10px] font-bold text-primary uppercase tracking-wider">Active</span>
+                        </div>
+                        <div class="w-full aspect-square rounded-lg overflow-hidden mb-6 relative">
+                            <img alt="Antique ceramic vase"
+                                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                                data-alt="antique Ming dynasty style blue and white porcelain vase sitting on a minimalist wooden pedestal against a soft neutral grey background, studio lighting"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-OSnu6CdSX2leAsBDd0Vw5ltEN5zGdnQK18XFO3PRpXqIta4XUCmETND890aGNo77ZRBl2mP0iOr9Qj6tjhV0lcJouqKVZR-UcW8AtwIkJX99cQXkZ-yaDJsZsb9rtzvQrDKhbvym1FCk3jXr4SV2O-0yAW-Az8H_bZ9vWYidz-FezpwTnw1uGv3HVTbB9wbwHRD-KdEvDthFB8Z3qT7At5aKrv1Qx1sU_2v5bbZV0KBqv03ZmcFIEbtK-wxWJtu53oRtUXrXZNs" />
+                        </div>
+                        <div class="flex-grow flex flex-col">
+                            <span
+                                class="font-label text-[10px] font-semibold text-on-surface-variant uppercase tracking-widest mb-2 block">Antiques</span>
+                            <h3
+                                class="font-headline text-lg font-bold text-on-surface leading-snug mb-3 group-hover:text-primary-container transition-colors">
+                                Ming-Style Blue &amp; White Porcelain Vase</h3>
+                            <div class="flex items-center gap-2 text-xs font-label text-on-surface-variant mb-6">
+                                <span class="material-symbols-outlined text-sm" data-icon="storefront">storefront</span>
+                                <span>Estate Finds LLC</span>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-surface-variant flex justify-between items-end">
+                                <div>
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Current
+                                        Bid</span>
+                                    <span class="font-headline text-xl font-extrabold text-on-surface">850.00 €</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Time
+                                        Left</span>
+                                    <span class="font-headline text-sm font-bold text-on-surface">1d 04h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Card 4 -->
+                    <article
+                        class="bg-surface-container-lowest rounded-xl p-6 flex flex-col relative group overflow-hidden border border-outline-variant/15 transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)]">
+                        <div
+                            class="absolute top-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 z-10 border border-white/20 shadow-sm">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                            <span
+                                class="font-label text-[10px] font-bold text-primary uppercase tracking-wider">Active</span>
+                        </div>
+                        <div class="w-full aspect-square rounded-lg overflow-hidden mb-6 relative">
+                            <img alt="Diamond engagement ring"
+                                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                                data-alt="macro shot of a brilliant cut diamond engagement ring set in platinum, resting on dark velvet fabric, sparkling light refractions"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuACp3l0uaRqVY97TyLxoeqU1zCK-AYsOYnw43QbygRMQQM0xu6DSmoyUW2kUDHOam24tH8Dw1K6HrQiCaq_GpwduhALQQFV2gf4H5H9T5v_b9LPn9KOru_rK6E8h2W0qnu929ltKwh4Zetkeh_3N_BLlD9-OdvKqJX112yMy8t0sRN8xH5VJ62p7HEVhywGgJWZAnqGZUApNA0cH_Kkjwr3SeHlDUgJL-YMZ2TlzKAQY9-IkyyIO0A47krYJsi786656mL47LoSuGY" />
+                        </div>
+                        <div class="flex-grow flex flex-col">
+                            <span
+                                class="font-label text-[10px] font-semibold text-on-surface-variant uppercase tracking-widest mb-2 block">Jewelry</span>
+                            <h3
+                                class="font-headline text-lg font-bold text-on-surface leading-snug mb-3 group-hover:text-primary-container transition-colors">
+                                2.5ct Brilliant Cut Diamond Ring, Platinum</h3>
+                            <div class="flex items-center gap-2 text-xs font-label text-on-surface-variant mb-6">
+                                <span class="material-symbols-outlined text-sm" data-icon="storefront">storefront</span>
+                                <span>Luxe Gems</span>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-surface-variant flex justify-between items-end">
+                                <div>
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Current
+                                        Bid</span>
+                                    <span class="font-headline text-xl font-extrabold text-on-surface">12,000.00
+                                        €</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Time
+                                        Left</span>
+                                    <span class="font-headline text-sm font-bold text-on-surface">3d 12h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- Card 5 (No bids yet state) -->
+                    <article
+                        class="bg-surface-container-lowest rounded-xl p-6 flex flex-col relative group overflow-hidden border border-outline-variant/15 transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)]">
+                        <div
+                            class="absolute top-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 z-10 border border-white/20 shadow-sm">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                            <span
+                                class="font-label text-[10px] font-bold text-primary uppercase tracking-wider">Active</span>
+                        </div>
+                        <div class="w-full aspect-square rounded-lg overflow-hidden mb-6 relative">
+                            <img alt="Rare first edition book"
+                                class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                                data-alt="stack of antique leather bound books with gold leaf lettering on the spine, resting on a polished mahogany desk in a dimly lit library setting"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQvEUkx-oLrt4o_l34j1sS8tfa7LuB2E0ySBhuiaJ8IURFMqTVym736jNy7funSQw7hallYK384VPdLZf8M2OG31AONXd3S8IFQBkW0ZYzHhSXi9qYtbsVxkjPG68-0-V2oVDaLD_xHaUX3ojO7I-CLFX3-ngZ3knrgnMcbWpxEXnyP-YGUfdCb8dfUcB2cAaGTNR0GYDQgxcu7OP80U0HBHWDvyjRYv6c3DctYwgwPIwKU8WeCTWgG_VALYINsd9mwOwI3seKl5I" />
+                        </div>
+                        <div class="flex-grow flex flex-col">
+                            <span
+                                class="font-label text-[10px] font-semibold text-on-surface-variant uppercase tracking-widest mb-2 block">Rare
+                                Books</span>
+                            <h3
+                                class="font-headline text-lg font-bold text-on-surface leading-snug mb-3 group-hover:text-primary-container transition-colors">
+                                First Edition: "The Great Gatsby" (1925)</h3>
+                            <div class="flex items-center gap-2 text-xs font-label text-on-surface-variant mb-6">
+                                <span class="material-symbols-outlined text-sm" data-icon="storefront">storefront</span>
+                                <span>Antiquarian Archives</span>
+                            </div>
+                            <div class="mt-auto pt-4 border-t border-surface-variant flex justify-between items-end">
+                                <div>
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Starting
+                                        Bid</span>
+                                    <span class="font-headline text-xl font-medium text-on-surface-variant">50.00
+                                        €</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-label text-[10px] text-on-surface-variant block mb-1">Time
+                                        Left</span>
+                                    <span class="font-headline text-sm font-bold text-on-surface">5d 08h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer
+        class="bg-[#f3f3f3] dark:bg-zinc-900 full-width py-12 tonal shift from surface to surface-container-low flat no shadows mt-auto">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center w-full px-12 border-t border-transparent max-w-screen-2xl mx-auto">
+            <!-- Brand/Copyright -->
+            <div class="mb-6 md:mb-0 flex flex-col items-center md:items-start">
+                <span class="font-['Manrope'] font-bold text-[#800020] text-lg mb-2">aste_online</span>
+                <span class="font-['Inter'] text-xs uppercase tracking-widest text-[#800020] dark:text-red-400">© 2024
+                    aste_online. The Curated Gallery.</span>
+            </div>
+            <!-- Footer Links -->
+            <div class="flex flex-wrap justify-center gap-6 font-['Inter'] text-xs uppercase tracking-widest">
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Terms of Service</a>
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Privacy Policy</a>
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Auction Rules</a>
+                <a class="text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity"
+                    href="#">Help Center</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

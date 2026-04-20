@@ -1,7 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 from django.utils import timezone
 from django.core.validators import MinValueValidator,MaxValueValidator
+
+class CustomUser(AbstractUser):
+    data_nascita = models.DateField(blank=True, null=True)
+    paese = models.CharField(max_length=100, blank=True, null=True)
+    citta = models.CharField(max_length=100, blank=True, null=True)
 
 class Asta(models.Model):
     """
@@ -11,13 +17,13 @@ class Asta(models.Model):
     """
     titolo = models.CharField(max_length=200)
     descrizione = models.TextField()
-    preferiti = models.ManyToManyField(User, related_name='aste_preferite', blank=True)
+    preferiti = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='aste_preferite', blank=True)
     immagine = models.ImageField(upload_to='immagini_aste/', blank=True, null=True)
     prezzo_iniziale = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     prezzo_corrente = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     data_creazione = models.DateTimeField(auto_now_add=True)
     data_scadenza = models.DateTimeField()
-    creatore = models.ForeignKey(User, on_delete=models.CASCADE, related_name='aste_create')
+    creatore = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='aste_create')
     attiva = models.BooleanField(default=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -42,7 +48,7 @@ class Offerta(models.Model):
     Rappresenta una singola offerta economica piazzata su un'asta.
     """
     asta = models.ForeignKey(Asta, on_delete=models.CASCADE, related_name='offerte')
-    offerente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='offerte_create')
+    offerente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='offerte_create')
     importo = models.DecimalField(max_digits=10, decimal_places=2)
     data_offerta = models.DateTimeField(auto_now_add=True)
 
@@ -69,8 +75,8 @@ class Recensione(models.Model):
     """
     Rappresenta una recensione lasciata dall'acquirente (vincitore) verso il venditore dell'asta.
     """
-    autore = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recensioni_create')
-    destinatario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recensioni_ricevute')
+    autore = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='recensioni_create')
+    destinatario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='recensioni_ricevute')
     asta = models.OneToOneField(Asta, on_delete=models.CASCADE, related_name='recensione', null=True, blank=True)
     voto = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     commento = models.TextField(blank=True, null=True)
@@ -87,8 +93,8 @@ class Messaggio(models.Model):
     """
     Messaggio privato scambiato nella chat integrata tra gli utenti (acquirente e venditore) per una specifica asta.
     """
-    mittente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messaggi_inviati')
-    destinatario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messaggi_ricevuti')
+    mittente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='messaggi_inviati')
+    destinatario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='messaggi_ricevute')
     asta = models.ForeignKey('Asta', on_delete=models.CASCADE, related_name='messaggi', null=True, blank=True)
     contenuto = models.TextField()
     data_invio = models.DateTimeField(auto_now_add=True)
@@ -104,3 +110,15 @@ class Messaggio(models.Model):
         return f"Da {self.mittente.username} a {self.destinatario.username} - {self.data_invio.strftime('%d/%m/%Y %H:%M')}"
 
             
+class TentativoIntrusione(models.Model):
+    """
+    Registra i tentativi di accesso al percorso /admin/ (honeypot).
+    Semplice log per la sicurezza.
+    """
+    indirizzo_ip = models.GenericIPAddressField()
+    user_agent = models.TextField()
+    data_tentativo = models.DateTimeField(auto_now_add=True)
+    username_tentato = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"Tentativo da {self.indirizzo_ip} il {self.data_tentativo.strftime('%d/%m/%Y %H:%M')}"

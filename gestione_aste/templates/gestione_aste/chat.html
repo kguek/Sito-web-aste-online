@@ -1,56 +1,78 @@
 {% extends "gestione_aste/base.html" %}
 
 {% block content %}
-<h2>Chat con {{ altro_utente.username }}</h2>
-<p style="color: #666; margin-top: -10px; margin-bottom: 20px;">Riguardo l'asta: <strong>{{ asta.titolo }}</strong></p>
-
-<div id="chat-log"
-    style="height: 400px; border: 1px solid #ccc; background-color: #f9f9f9; padding: 15px; overflow-y: scroll; margin-bottom: 20px; border-radius: 5px;">
-
-    {% for msg in storico_messaggi %}
-    <div style="margin-bottom: 10px;">
-        {% if msg.mittente == request.user %}
-        <div style="text-align: right; color: blue;">
-            <strong>Tu:</strong> {{ msg.contenuto }}
+<div class="max-w-4xl mx-auto py-8">
+    <!-- Chat Header -->
+    <div class="bg-surface-container-low rounded-t-xl p-6 border-x border-t border-outline-variant/15 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center text-on-primary shadow-sm">
+                <span class="material-symbols-outlined">person</span>
+            </div>
+            <div>
+                <h2 class="text-xl font-headline font-bold text-on-surface">Chat con {{ altro_utente.username }}</h2>
+                <p class="text-xs font-body text-on-surface-variant">Riguardo: <span class="font-semibold text-primary-container">{{ asta.titolo }}</span></p>
+            </div>
         </div>
-        {% else %}
-        <div style="text-align: left; color: green;">
-            <strong>{{ msg.mittente.username }}:</strong> {{ msg.contenuto }}
-        </div>
-        {% endif %}
+        <a href="{% url 'inbox' %}" class="p-2 hover:bg-surface-container rounded-full transition-colors text-on-surface-variant" title="Torna alla lista messaggi">
+            <span class="material-symbols-outlined">close</span>
+        </a>
     </div>
-    {% endfor %}
 
-</div>
+    <!-- Chat Log -->
+    <div id="chat-log" class="h-[500px] border-x border-outline-variant/15 bg-surface-container-lowest p-6 overflow-y-auto flex flex-col gap-4 font-body scroll-smooth">
+        {% for msg in storico_messaggi %}
+        <div class="flex flex-col {% if msg.mittente == request.user %}items-end{% else %}items-start{% endif %}">
+            <div class="max-w-[80%] px-4 py-2 text-sm {% if msg.mittente == request.user %}bg-primary-container text-white rounded-l-xl rounded-tr-xl{% else %}bg-surface-container-high text-on-surface rounded-r-xl rounded-tl-xl{% endif %} shadow-sm">
+                <p>{{ msg.contenuto }}</p>
+            </div>
+            <span class="text-[10px] text-on-surface-variant mt-1 px-1">
+                {% if msg.mittente == request.user %}Tu{% else %}{{ msg.mittente.username }}{% endif %} • {{ msg.data_invio|time:"H:i" }}
+            </span>
+        </div>
+        {% endfor %}
+    </div>
 
-<div style="display: flex; gap: 10px;">
-    <input id="chat-message-input" type="text" style="flex-grow: 1; padding: 10px;"
-        placeholder="Scrivi un messaggio...">
-    <button id="chat-message-submit" style="padding: 10px 20px;">Invia</button>
+    <!-- Chat Input -->
+    <div class="bg-surface-container-low rounded-b-xl p-4 border border-outline-variant/15 flex gap-4 shadow-sm">
+        <input id="chat-message-input" type="text" 
+            class="flex-grow bg-surface-container-lowest border border-outline-variant/20 rounded-lg px-6 py-3 text-sm text-on-surface focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all outline-none"
+            placeholder="Scrivi un messaggio...">
+        
+        <button id="chat-message-submit" class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-lg font-bold font-headline text-sm flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <span class="material-symbols-outlined text-sm">send</span>
+            Invia
+        </button>
+    </div>
 </div>
 
 <script>
-
-    const chatSocketUrl = 'ws://' + window.location.host + '/ws/chat/{{ asta.id }}/{{ altro_utente.id }}/';
-
+    const chatSocketUrl = (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/{{ asta.id }}/{{ altro_utente.id }}/';
     const chatSocket = new WebSocket(chatSocketUrl);
+
+    const chatLog = document.getElementById('chat-log');
+    chatLog.scrollTop = chatLog.scrollHeight;
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        const chatLog = document.getElementById('chat-log');
-
-        let allineamento = "left";
-        let colore = "green";
-        let nome_visualizzato = data.mittente + ":";
-
-        if (data.mittente === "{{ request.user.username }}") {
-            allineamento = "right";
-            colore = "blue";
-            nome_visualizzato = "Tu:";
-        }
-
-        chatLog.innerHTML += '<div style="margin-bottom: 10px; text-align: ' + allineamento + '; color: ' + colore + ';"><strong>' + nome_visualizzato + '</strong> ' + data.message + '</div>';
-
+        const isMe = data.mittente === "{{ request.user.username }}";
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = `max-w-[80%] px-4 py-2 text-sm ${isMe ? 'bg-primary-container text-white rounded-l-xl rounded-tr-xl' : 'bg-surface-container-high text-on-surface rounded-r-xl rounded-tl-xl'} shadow-sm`;
+        contentDiv.innerHTML = `<p>${data.message}</p>`;
+        
+        const metaSpan = document.createElement('span');
+        metaSpan.className = "text-[10px] text-on-surface-variant mt-1 px-1";
+        const now = new Date();
+        const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        metaSpan.innerText = `${isMe ? 'Tu' : data.mittente} • ${timeStr}`;
+        
+        messageDiv.appendChild(contentDiv);
+        messageDiv.appendChild(metaSpan);
+        
+        chatLog.appendChild(messageDiv);
         chatLog.scrollTop = chatLog.scrollHeight;
     };
 
@@ -58,24 +80,22 @@
         console.error('La connessione WebSocket si è chiusa inaspettatamente');
     };
 
-    document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function (e) {
-        if (e.keyCode === 13) {  // enter, return
+    const messageInput = document.querySelector('#chat-message-input');
+    messageInput.focus();
+    messageInput.onkeyup = function (e) {
+        if (e.keyCode === 13) {
             document.querySelector('#chat-message-submit').click();
         }
     };
 
     document.querySelector('#chat-message-submit').onclick = function (e) {
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-
+        const message = messageInput.value;
+        if (message.trim() === "") return;
+        
         chatSocket.send(JSON.stringify({
             'message': message
         }));
-        messageInputDom.value = '';
+        messageInput.value = '';
     };
-
-    const chatLog = document.getElementById('chat-log');
-    chatLog.scrollTop = chatLog.scrollHeight;
 </script>
 {% endblock %}

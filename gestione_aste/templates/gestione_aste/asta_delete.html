@@ -1,11 +1,29 @@
 {% extends 'gestione_aste/base.html' %}
 
 {% block content %}
-<h2>Elimina Asta</h2>
-<p>Sei sicuro di voler eliminare l'asta "{{ asta.titolo }}"?</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Sì, elimina l'asta</button>
-    <a href="{% url 'area_personale' %}">Annulla</a>
-</form>
+<div class="flex-grow flex items-center justify-center py-12 text-center">
+    <div class="max-w-md w-full bg-surface-container-lowest rounded-xl p-8 sm:p-12 relative overflow-hidden shadow-sm border border-outline-variant/15">
+        <div class="w-20 h-20 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="material-symbols-outlined text-4xl text-error">delete_forever</span>
+        </div>
+        
+        <h1 class="text-3xl font-extrabold text-on-surface font-headline mb-4 tracking-tight">Elimina Asta</h1>
+        <p class="text-on-surface-variant font-body text-base mb-2">Sei sicuro di voler eliminare definitivamente l'asta:</p>
+        <p class="font-headline font-bold text-lg text-on-surface mb-8">"{{ asta.titolo }}"?</p>
+        
+        <div class="flex flex-col gap-4">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="w-full bg-error text-white rounded-lg font-bold font-headline py-3 px-8 hover:bg-error/90 transition-colors shadow-sm">
+                    Sì, Elimina Indiscutibilmente
+                </button>
+            </form>
+            <a href="{% url 'area_personale' %}" class="w-full bg-surface-container-high text-on-surface rounded-lg font-bold font-headline py-3 px-8 hover:bg-surface-container-highest transition-colors">
+                Annulla e Torna Indietro
+            </a>
+        </div>
+        
+        <p class="mt-8 text-xs text-on-surface-variant italic">Nota: questa operazione non può essere annullata.</p>
+    </div>
+</div>
 {% endblock %}

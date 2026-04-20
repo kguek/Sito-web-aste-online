@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy,reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 from .models import *
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
@@ -77,9 +80,9 @@ class InboxView(LoginRequiredMixin, TemplateView):
 class RegistrazioneView(CreateView):
      """
      Gestisce la registrazione di un nuovo utente utilizzando
-     il form nativo UserCreationForm di Django.
+     il form personalizzato CustomUserCreationForm.
      """
-     form_class = UserCreationForm
+     form_class = CustomUserCreationForm
      template_name = 'registration/registrazione.html'
      success_url = reverse_lazy('login')
 
@@ -131,10 +134,15 @@ class AstaCreateView(LoginRequiredMixin, CreateView):
     def get_form(self, form_class=None):
         """
         Migliora l'interfaccia utente impostando un widget DateTime nativo
-        per il campo immissione data_scadenza.
+        per il campo immissione data_scadenza e inietta le classi Tailwind.
         """
         form = super().get_form(form_class)
-        form.fields['data_scadenza'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
+        form.fields['titolo'].widget.attrs.update({'class': 'w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-4 py-3 text-on-surface focus:ring-1 focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm', 'placeholder': 'Es. Orologio Vintage'})
+        form.fields['categoria'].widget.attrs.update({'class': 'w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-4 py-3 text-on-surface focus:ring-1 focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm appearance-none'})
+        form.fields['descrizione'].widget.attrs.update({'class': 'w-full bg-transparent border-none focus:ring-0 px-4 py-3 text-on-surface resize-y', 'rows': '5', 'placeholder': "Fornisci dettagli precisi sulla storia, le condizioni e la provenienza dell'oggetto..."})
+        form.fields['immagine'].widget.attrs.update({'class': 'w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-surface file:text-on-surface hover:file:bg-surface-container-low transition-colors cursor-pointer'})
+        form.fields['prezzo_iniziale'].widget.attrs.update({'class': 'w-full bg-surface-container-lowest border-transparent rounded-lg pl-10 pr-4 py-3 text-on-surface font-headline text-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm', 'placeholder': '0.00'})
+        form.fields['data_scadenza'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'w-full bg-surface-container-lowest border-transparent rounded-lg px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-colors shadow-sm'})
         return form
 
     def form_valid(self, form):
@@ -217,7 +225,7 @@ class AreaPersonaleView(LoginRequiredMixin,ListView):
           context['aste_vinte'] = Asta.objects.filter(
                Q(data_scadenza__lt=timezone.now()) | Q(attiva=False)).annotate(
                ultimo_offerente_id=Subquery(latest_offer_user_id),
-               ultimo_offerente_username=Subquery(latest_bidder_username)).filter(ultimo_offerente_id=self.request.user.id).order_by('-data_scadenza')
+               ultimo_offerente_username=Subquery(latest_bidder_username)).filter(ultimo_offerente_id=self.request.user.id).select_related('recensione').order_by('-data_scadenza')
           return context
 
 class AstaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -407,3 +415,25 @@ class CreaRecensioneView(LoginRequiredMixin, HaCompratoMixin, CreateView):
      def get_success_url(self):
           asta = get_object_or_404(Asta, pk=self.kwargs['pk'])
           return reverse('profilo_venditore', kwargs={'pk':asta.creatore.pk})
+
+def admin_honeypot_view(request):
+    """
+    Trappola per chi cerca di accedere a /admin/. 
+    Registra l'intrusione e mostra una finta pagina di errore.
+    """
+    indirizzo_ip = request.META.get('REMOTE_ADDR')
+    user_agent = request.META.get('HTTP_USER_AGENT', 'Sconosciuto')
+    username_tentato = request.POST.get('username', 'N/A')
+
+    # Salviamo l'intrusione nel database
+    TentativoIntrusione.objects.create(
+        indirizzo_ip=indirizzo_ip,
+        user_agent=user_agent,
+        username_tentato=username_tentato
+    )
+
+    # Mostriamo una finta pagina di login o un errore 403
+    return render(request, 'registration/login.html', {
+        'error': 'Accesso negato. Il tuo indirizzo IP è stato registrato.',
+        'form': None # Nascondiamo il form reale per sicurezza nella trappola
+    })

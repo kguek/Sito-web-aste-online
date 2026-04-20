@@ -1,7 +1,18 @@
 {% extends 'gestione_aste/base.html' %}
 
 {% block content %}
-<h2>Logout</h2>
-<p>Sei stato disconnesso con successo.</p>
-<a href="{% url 'home' %}">Home</a>
+<div class="flex-grow flex items-center justify-center py-12 text-center">
+    <div class="max-w-md w-full bg-surface-container-lowest rounded-xl p-8 sm:p-12 relative overflow-hidden shadow-sm border border-outline-variant/15">
+        <div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="material-symbols-outlined text-4xl text-on-surface-variant">logout</span>
+        </div>
+        
+        <h1 class="text-3xl font-extrabold text-on-surface font-headline mb-4 tracking-tight">Sessione Chiusa</h1>
+        <p class="text-on-surface-variant font-body text-base mb-8">Sei stato disconnesso con successo. Grazie per averci visitato!</p>
+        
+        <a href="{% url 'home' %}" class="inline-block bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-lg font-bold font-headline py-3 px-8 hover:opacity-90 transition-opacity shadow-sm">
+            Torna alla Home
+        </a>
+    </div>
+</div>
 {% endblock %}

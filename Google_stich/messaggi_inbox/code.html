@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Messages - aste_online</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#ff828a",
+                        "on-tertiary-fixed": "#001f26",
+                        "primary": "#570013",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb3b5",
+                        "surface-container": "#eeeeee",
+                        "secondary": "#90494d",
+                        "on-primary-fixed-variant": "#8e0f28",
+                        "on-background": "#1a1c1c",
+                        "on-secondary-fixed": "#3b070e",
+                        "background": "#f9f9f9",
+                        "surface-tint": "#af2b3e",
+                        "secondary-fixed": "#ffdada",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#584141",
+                        "inverse-primary": "#ffb3b5",
+                        "surface-variant": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#004451",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#79363b",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#002c36",
+                        "on-tertiary-container": "#7cb0c0",
+                        "primary-fixed-dim": "#ffb3b5",
+                        "on-secondary-fixed-variant": "#743237",
+                        "secondary-container": "#fda3a6",
+                        "surface-dim": "#dadada",
+                        "outline-variant": "#e0bfbf",
+                        "tertiary-fixed-dim": "#9acfde",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-low": "#f3f3f3",
+                        "inverse-on-surface": "#f1f1f1",
+                        "primary-fixed": "#ffdada",
+                        "primary-container": "#800020",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#40000b",
+                        "inverse-surface": "#2f3131",
+                        "outline": "#8c7071",
+                        "tertiary-fixed": "#b6ebfb",
+                        "on-tertiary-fixed-variant": "#114d5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bordeaux-gradient {
+            background: linear-gradient(135deg, #570013 0%, #800020 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-white dark:bg-zinc-950 docked full-width top-0 z-50">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<a class="font-['Manrope'] text-2xl font-extrabold tracking-tighter text-[#800020] dark:text-white uppercase" href="#">
+                aste_online
+            </a>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-['Manrope'] text-sm tracking-tight font-medium text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Home</a>
+<a class="font-['Manrope'] text-sm tracking-tight font-medium text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Insert Auction</a>
+<a class="font-['Manrope'] text-sm tracking-tight font-medium text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Personal Area</a>
+<a class="font-['Manrope'] text-sm tracking-tight font-medium text-[#800020] dark:text-red-400 font-bold border-b-2 border-[#800020] pb-1" href="#">Messages</a>
+<a class="font-['Manrope'] text-sm tracking-tight font-medium text-zinc-600 dark:text-zinc-400 hover:text-[#800020] transition-colors" href="#">Wishlist</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block">
+<input class="bg-surface-container-low border-none rounded-full py-2 px-4 text-sm font-body text-on-surface focus:ring-1 focus:ring-outline-variant w-48" placeholder="Search..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-on-surface-variant text-sm">search</span>
+</div>
+<button class="font-['Manrope'] text-sm tracking-tight font-medium text-zinc-600 hover:text-[#800020] transition-colors">Login</button>
+<button class="font-['Manrope'] text-sm tracking-tight font-medium text-[#800020] dark:text-red-400 bg-surface-container-low px-4 py-2 rounded-full hover:bg-zinc-50 transition-all duration-300 scale-95 duration-200 ease-in-out">Logout</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-screen-xl mx-auto px-6 py-12">
+<div class="mb-12">
+<h1 class="font-headline text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tighter mb-4">Messages</h1>
+<p class="font-body text-on-surface-variant text-lg max-w-2xl">Manage your auction communications and negotiate with confidence in your curated inbox.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Sidebar / Filters -->
+<aside class="lg:col-span-3">
+<div class="bg-surface-container-low rounded-xl p-6 sticky top-24">
+<h2 class="font-headline text-xl font-bold mb-6 text-on-surface">Filter Conversations</h2>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-lowest shadow-sm cursor-pointer border border-outline-variant/15">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">inbox</span>
+<span class="font-label font-medium text-sm text-on-surface">All Messages</span>
+<span class="ml-auto bg-primary-container text-on-primary text-xs py-0.5 px-2 rounded-full">12</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container-lowest cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">sell</span>
+<span class="font-label font-medium text-sm">My Auctions</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container-lowest cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-label font-medium text-sm">My Bids</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-container-lowest cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">archive</span>
+<span class="font-label font-medium text-sm">Archived</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Inbox List -->
+<section class="lg:col-span-9 space-y-6">
+<!-- Message Item 1 (Unread) -->
+<article class="bg-surface-container-lowest rounded-xl p-6 flex flex-col md:flex-row gap-6 relative group border border-outline-variant/15 transition-all hover:bg-surface-bright">
+<div class="absolute top-6 left-4 w-2 h-2 bg-primary-container rounded-full animate-pulse"></div>
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container-low rounded-lg overflow-hidden hidden md:block">
+<img alt="Vintage Rolex Submariner watch close up" class="w-full h-full object-cover" data-alt="close-up of a vintage luxury watch with detailed dial against dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOGRETmPfbwOY55KTafSjyyju-XAtcvJRxRmFL65kKnBZUMuu_mB9dMW1mz70jnpWMc91wi7DGuXP2I4Mn1H5t-GrhZEmjcHqDWAVFqRbVUmWbjkZbI0_nonWes4InmMZ0nvoT7Vg9VltHH5ygtZxNJk6PgTe770VtEtuDzaMYJ37SgX-pEsSxcolHTY94Jx0uTc9MXtAWi0r7WaFbs2u-0UVtD6nj2L5-AR-nKxANYnT1nTUw48R3J_Re6mWk6h2w4g0X9paxDvc"/>
+</div>
+<div class="flex-grow flex flex-col justify-center">
+<div class="flex justify-between items-start mb-2 pl-4 md:pl-0">
+<div>
+<span class="font-label text-xs text-primary font-semibold uppercase tracking-wider mb-1 block">Auction: 1970 Vintage Submariner</span>
+<h3 class="font-headline text-xl font-bold text-on-surface">Alex Mercer</h3>
+</div>
+<span class="font-label text-sm text-on-surface-variant whitespace-nowrap">10:42 AM</span>
+</div>
+<p class="font-body text-sm text-on-surface font-medium mb-4 pl-4 md:pl-0 line-clamp-2">
+                            I'm highly interested in this piece. Could you confirm if the bezel has been polished or if it remains in original condition? I am prepared to place a premium bid.
+                        </p>
+</div>
+<div class="flex-shrink-0 flex items-center md:items-end justify-end pl-4 md:pl-0">
+<button class="bordeaux-gradient text-on-primary font-label text-sm font-medium py-2.5 px-6 rounded-md hover:opacity-90 transition-opacity flex items-center gap-2">
+                            Open Chat
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Message Item 2 -->
+<article class="bg-surface rounded-xl p-6 flex flex-col md:flex-row gap-6 border border-outline-variant/15 transition-all hover:bg-surface-bright">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container-low rounded-lg overflow-hidden hidden md:block opacity-80">
+<img alt="Mid-century modern armchair" class="w-full h-full object-cover" data-alt="elegant mid-century modern wooden armchair with soft lighting in a minimalist setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTTwzQfRHA_hYbPn0mXAdEzQigTDLPSX51VEZ5I3FrWrvHtJyve_nVgI_nAndmoD-YtR_M-_ZjtMdmvqGf1keDhasRCpt18QKI9QgeIlDQ-UVxSUDxiTkgNIdG7U7fOnjLYuNpI2oMEfy0-eT91hPsOA74l_CCk_rMW5foUX5zhuFszc8N_WuUZA2JFqbu5iBqzDn_fZKoQc-q-e4Q6V2fLQHfA6HPtcvkJlYUE-VJrGEKb9aDSyRLg8X8db0-6VA4JIEwbVXB7Hg"/>
+</div>
+<div class="flex-grow flex flex-col justify-center">
+<div class="flex justify-between items-start mb-2">
+<div>
+<span class="font-label text-xs text-on-surface-variant uppercase tracking-wider mb-1 block">Auction: Eames Lounge Chair Orig.</span>
+<h3 class="font-headline text-xl font-bold text-on-surface">Sarah Jenkins</h3>
+</div>
+<span class="font-label text-sm text-on-surface-variant whitespace-nowrap">Yesterday</span>
+</div>
+<p class="font-body text-sm text-on-surface-variant mb-4 line-clamp-2">
+                            Thank you for providing the additional photos of the leather grain. I have submitted my formal bid. Looking forward to the auction close.
+                        </p>
+</div>
+<div class="flex-shrink-0 flex items-center md:items-end justify-end">
+<button class="bg-surface-container-high text-on-surface font-label text-sm font-medium py-2.5 px-6 rounded-md hover:bg-surface-dim transition-colors flex items-center gap-2">
+                            Open Chat
+                        </button>
+</div>
+</article>
+<!-- Message Item 3 -->
+<article class="bg-surface rounded-xl p-6 flex flex-col md:flex-row gap-6 border border-outline-variant/15 transition-all hover:bg-surface-bright">
+<div class="w-24 h-24 flex-shrink-0 bg-surface-container-low rounded-lg overflow-hidden hidden md:block opacity-80">
+<img alt="Abstract painting" class="w-full h-full object-cover grayscale opacity-50" data-alt="modern abstract oil painting with textured bold strokes of blue and crimson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASYYrfanGWzb9eEdLayaAf9zo22Z1xgI4w8dF05_2So-3o0ez-MPTZE25nLxpiOMNzqKrPT8gQdRffdcPsAf25-AXglb8WK3yYX83lhKHec6bCmFU0y-1YRr4zz4nwmTW22xs1fRPisRVCTwnVTQvq7x1EZAuvmpjf2hBERPatBdPEhbO0fm5Oj3npuaKnf_HW1hIBKBzLbtCQKQ5T2vuO45nvZJ4VMxldV9zkLEFjWRHT0H4WXn0AT1cD4QhPb-UntQakSxvOYoo"/>
+</div>
+<div class="flex-grow flex flex-col justify-center">
+<div class="flex justify-between items-start mb-2">
+<div>
+<span class="font-label text-xs text-on-surface-variant uppercase tracking-wider mb-1 block">Auction: Abstract Canvas #4 (Ended)</span>
+<h3 class="font-headline text-xl font-bold text-on-surface">David Chen</h3>
+</div>
+<span class="font-label text-sm text-on-surface-variant whitespace-nowrap">Oct 12</span>
+</div>
+<p class="font-body text-sm text-on-surface-variant mb-4 line-clamp-2">
+                            Payment has been processed via escrow. Please advise on estimated shipping timeline.
+                        </p>
+</div>
+<div class="flex-shrink-0 flex items-center md:items-end justify-end">
+<button class="bg-surface-container-high text-on-surface font-label text-sm font-medium py-2.5 px-6 rounded-md hover:bg-surface-dim transition-colors flex items-center gap-2">
+                            Open Chat
+                        </button>
+</div>
+</article>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f3f3f3] dark:bg-zinc-900 full-width py-12">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 border-t border-transparent">
+<div class="mb-6 md:mb-0">
+<span class="font-['Manrope'] font-bold text-[#800020] text-xl">aste_online</span>
+</div>
+<nav class="flex gap-6 mb-6 md:mb-0">
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Terms of Service</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Privacy Policy</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Auction Rules</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-zinc-500 dark:text-zinc-500 hover:text-[#800020] dark:hover:text-red-300 underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Help Center</a>
+</nav>
+<div>
+<p class="font-['Inter'] text-xs text-zinc-500 dark:text-zinc-500">© 2024 aste_online. The Curated Gallery.</p>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,25 +1,74 @@
 {% extends "gestione_aste/base.html" %}
 
-
 {% block content %}
-<h2>La mia Wishlist ❤️</h2>
-<p>Ecco le aste che stai tenendo d'occhio:</p>
+<div class="py-12">
+    <div class="mb-12 border-b border-surface-container-high pb-6 flex items-center justify-between">
+        <div>
+            <h1 class="font-headline text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tighter mb-4">Le Tue Aste Preferite</h1>
+            <p class="font-body text-on-surface-variant text-lg max-w-2xl">Le aste che stai tenendo d'occhio. Non perdere l'occasione!</p>
+        </div>
+        <div class="w-16 h-16 bg-primary-container/10 rounded-full flex items-center justify-center text-primary-container">
+            <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+        </div>
+    </div>
 
-<ul>
-    {% for asta in object_list %}
-    <li>
-        <strong><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></strong>
-        - Scade il: {{ asta.data_scadenza }}
-        <form action="{% url 'toggle_preferito' asta.pk %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit"
-                style="background: none; border: none; color: red; text-decoration: underline; cursor: pointer;">[Rimuovi]</button>
-        </form>
-    </li>
-    <hr>
-    {% empty %}
-    <p>Non hai ancora aggiunto nessuna asta ai preferiti.</p>
-    <a href="{% url 'home' %}">Torna alla home per esplorare!</a>
-    {% endfor %}
-</ul>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for asta in object_list %}
+        <article class="bg-surface-container-lowest rounded-xl p-6 flex flex-col relative group overflow-hidden border border-outline-variant/15 transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)]">
+            
+            <!-- Immagine -->
+            <a href="{% url 'dettaglio_asta' asta.pk %}" class="w-full aspect-square rounded-lg overflow-hidden mb-6 block relative">
+                {% if asta.immagine %}
+                <img alt="{{ asta.titolo }}" class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-in-out" src="{{ asta.immagine.url }}" />
+                {% else %}
+                <div class="w-full h-full bg-surface-variant flex items-center justify-center transform group-hover:scale-105 transition-transform duration-700 ease-in-out">
+                    <span class="material-symbols-outlined text-outline text-4xl">image</span>
+                </div>
+                {% endif %}
+                
+                <!-- Azione Rimuovi rapida -->
+                <form action="{% url 'toggle_preferito' asta.pk %}" method="post" class="absolute top-4 right-4 z-20">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-surface-container-lowest/90 backdrop-blur-md p-2 rounded-full text-error hover:scale-110 transition-transform shadow-md border border-white/20">
+                        <span class="material-symbols-outlined text-sm">heart_broken</span>
+                    </button>
+                </form>
+            </a>
+
+            <!-- Info -->
+            <div class="flex-grow flex flex-col">
+                <span class="font-label text-[10px] font-semibold text-on-surface-variant uppercase tracking-widest mb-2 block">
+                    {% if asta.categoria %}{{ asta.categoria.nome }}{% else %}Senza Categoria{% endif %}
+                </span>
+                <h3 class="font-headline text-lg font-bold text-on-surface leading-snug mb-3 group-hover:text-primary-container transition-colors">
+                    <a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a>
+                </h3>
+                
+                <div class="mt-auto pt-4 border-t border-surface-variant flex justify-between items-center">
+                    <div>
+                        <span class="font-label text-[10px] text-on-surface-variant block mb-1">Prezzo Attuale</span>
+                        <span class="font-headline text-xl font-extrabold text-on-surface">{{ asta.prezzo_corrente|floatformat:2 }} €</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-label text-[10px] text-error block mb-1 flex items-center justify-end gap-1">
+                            <span class="material-symbols-outlined text-[10px]">schedule</span>
+                            Scade il
+                        </span>
+                        <span class="font-headline text-xs font-bold text-on-surface">{{ asta.data_scadenza|date:"d M H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div class="col-span-full py-24 text-center bg-surface-container-low rounded-2xl border border-dashed border-outline-variant/30 flex flex-col items-center">
+            <span class="material-symbols-outlined text-6xl text-surface-variant mb-4">favorite_border</span>
+            <h3 class="text-xl font-headline font-bold text-on-surface mb-2">Ancora nulla nei preferiti</h3>
+            <p class="text-sm text-on-surface-variant mb-8 max-w-md">Inizia ad esplorare le aste attive e aggiungi quelle che ti interessano cliccando sul cuore ❤️</p>
+            <a href="{% url 'home' %}" class="bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold font-headline py-3 px-8 rounded-lg shadow-sm hover:opacity-90 transition-opacity">
+                Esplora Aste
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

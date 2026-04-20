@@ -1,85 +1,199 @@
-{% extends "gestione_aste/base.html" %}
+{% extends 'gestione_aste/base.html' %}
 
 {% block content %}
-<h2>La Mia Area Personale</h2>
-<p>Recensioni ricevute: {{numero_recensioni}} - {{media_voto}}</p>
+<div class="w-full flex flex-col gap-12">
+    <!-- User Profile Header & Stats (Bento-style) -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Profile Card -->
+        <div class="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-xl p-8 flex flex-col md:flex-row items-center md:items-start gap-8 shadow-[0_24px_48px_-12px_rgba(26,28,28,0.06)] relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-2 h-full bg-primary-container"></div>
+            <div class="w-32 h-32 rounded-full shadow-md border-4 border-surface bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-6xl text-primary-container">person</span>
+            </div>
+            
+            <div class="flex flex-col flex-grow text-center md:text-left">
+                <h1 class="text-4xl font-headline font-bold text-on-surface mb-2">{{ request.user.username }}</h1>
+                <p class="text-on-surface-variant font-body text-sm mb-4">Membro dal {{ request.user.date_joined|date:"Y" }}</p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-6 mt-auto">
+                    <div>
+                        <p class="text-xs font-label text-on-surface-variant uppercase tracking-wider mb-1">Aste Create</p>
+                        <p class="text-2xl font-headline font-semibold text-primary-container">{{ aste_attive_utente.count|add:aste_finite_utente.count }}</p>
+                    </div>
+                    <div class="w-px h-10 bg-surface-variant hidden md:block"></div>
+                    <div>
+                        <p class="text-xs font-label text-on-surface-variant uppercase tracking-wider mb-1">Aste Attive</p>
+                        <p class="text-2xl font-headline font-semibold text-primary-container">{{ aste_attive_utente.count }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<hr style="margin: 30px 0;">
+        <!-- Reputation Card -->
+        <div class="col-span-1 bg-surface-container-low rounded-xl p-8 flex flex-col justify-center items-center text-center">
+            <h2 class="text-sm font-label text-on-surface-variant uppercase tracking-widest mb-4">Reputazione Venditore</h2>
+            <div class="flex items-center gap-2 mb-2 text-primary-container">
+                <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">star</span>
+            </div>
+            <p class="text-3xl font-headline font-bold text-on-surface">{{ media_voto }} <span class="text-lg font-normal text-on-surface-variant">/ 5.0</span></p>
+            <a href="{% url 'profilo_venditore' user.id %}" class="text-sm font-body text-on-surface-variant mt-2 underline decoration-surface-variant underline-offset-4 cursor-pointer hover:text-primary transition-colors">Basato su {{ numero_recensioni }} Recensioni</a>
+        </div>
+    </section>
 
-<h3>Aste in vendita</h3>
-<ul>
-    {% for asta in aste_attive_utente %}
-    <li style="margin-bottom: 15px;">
-        <strong><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></strong>
-        <br>- Prezzo attuale: {{ asta.prezzo_corrente|floatformat:2 }} €
-        <br>- Scadenza: {{ asta.data_scadenza }}
+    <!-- Your Auctions for Sale (Live) -->
+    <section>
+        <div class="flex justify-between items-end mb-6">
+            <div>
+                <h2 class="text-3xl font-headline font-bold text-on-surface">Le Tue Aste Attive</h2>
+                <p class="text-sm font-body text-on-surface-variant mt-1">Gli oggetti che stai attualmente vendendo.</p>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for asta in aste_attive_utente %}
+            <div class="bg-surface-container-lowest rounded-xl flex flex-col overflow-hidden group shadow-sm border border-outline-variant/15">
+                <div class="relative h-64 overflow-hidden rounded-t-xl bg-surface-container">
+                    <a href="{% url 'dettaglio_asta' asta.pk %}" class="block w-full h-full">
+                        {% if asta.immagine %}
+                        <img alt="{{ asta.titolo }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ asta.immagine.url }}"/>
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center transition-transform duration-700 group-hover:scale-105">
+                            <span class="material-symbols-outlined text-on-surface-variant text-4xl">image</span>
+                        </div>
+                        {% endif %}
+                    </a>
+                    
+                    <div class="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                        <span class="text-xs font-label font-bold text-primary uppercase tracking-wider">Live</span>
+                    </div>
+                    
+                    {% if asta.ultimo_offerente_username %}
+                    <div class="absolute top-4 right-4 bg-surface-container-highest/90 backdrop-blur-md px-2 py-1 rounded-md text-xs font-bold shadow-sm">
+                        Miglior: {{ asta.ultimo_offerente_username }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-xl font-headline font-semibold text-on-surface mb-2"><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></h3>
+                    <p class="text-sm font-body text-on-surface-variant mb-6 line-clamp-2">{{ asta.descrizione }}</p>
+                    
+                    <div class="mt-auto bg-surface-container-high rounded-lg p-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-label text-on-surface-variant uppercase tracking-wider">Offerta Attuale</p>
+                            <p class="text-2xl font-headline font-bold text-primary-container">{{ asta.prezzo_corrente|floatformat:2 }} €</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-label text-on-surface-variant uppercase tracking-wider">Scade Tra</p>
+                            <p class="text-lg font-headline font-medium text-on-surface">{{ asta.data_scadenza|timeuntil }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-surface-variant flex justify-between">
+                        <a href="{% url 'elimina_asta' asta.pk %}" class="text-error font-medium text-sm hover:underline">Ritira / Elimina Asta</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-10 bg-surface-container-lowest rounded-xl border border-outline-variant/15">
+                <span class="material-symbols-outlined text-surface-dim text-5xl mb-2">inbox</span>
+                <p class="text-on-surface-variant font-medium">Non hai aste attive al momento.</p>
+                <a href="{% url 'asta-nuova' %}" class="text-primary-container font-semibold text-sm mt-2 inline-block hover:underline">Inserisci una nuova asta</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 
-        <br>
-        {% if asta.ultimo_offerente_username %}
-        - <span style="color: green;">Offerta massima attuale:</span> {{ asta.ultimo_offerente_username }} ({{ asta.prezzo_corrente|floatformat:2 }} €)
-        {% else %}
-        - <span style="color: gray;">Nessuna offerta ricevuta.</span>
-        {% endif %}
+    <!-- Asymmetric Split Section: Won vs Closed -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        
+        <!-- Auctions Won (Left - wider) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            <div>
+                <h2 class="text-2xl font-headline font-bold text-on-surface border-b-2 border-surface-container-high pb-4">Aste Vinte</h2>
+            </div>
+            
+            <div class="flex flex-col gap-4">
+                {% for asta in aste_vinte %}
+                <div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col sm:flex-row sm:items-center gap-6 group hover:bg-surface-container-low transition-colors shadow-sm border border-outline-variant/15">
+                    <a href="{% url 'dettaglio_asta' asta.pk %}" class="w-full sm:w-24 h-48 sm:h-24 rounded-lg overflow-hidden bg-surface-container block flex-shrink-0">
+                        {% if asta.immagine %}
+                        <img alt="{{ asta.titolo }}" class="w-full h-full object-cover" src="{{ asta.immagine.url }}"/>
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center">
+                            <span class="material-symbols-outlined text-surface-variant">image</span>
+                        </div>
+                        {% endif %}
+                    </a>
+                    
+                    <div class="flex-grow">
+                        <h4 class="font-headline font-semibold text-lg text-on-surface"><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></h4>
+                        <p class="text-sm font-body text-on-surface-variant mb-2">Venditore: {{ asta.creatore.username }}</p>
+                        
+                        {% if asta.recensione %}
+                        <span class="inline-flex items-center gap-1 text-xs font-label font-medium text-zinc-500 italic">
+                            <span class="material-symbols-outlined text-sm">check_circle</span> Hai già recensito questo acquisto
+                        </span>
+                        {% else %}
+                        <a href="{% url 'crea_recensione' asta.pk %}" class="inline-flex items-center gap-1 text-xs font-label font-medium text-primary-container hover:text-primary transition-colors underline underline-offset-4">
+                            <span class="material-symbols-outlined text-sm">rate_review</span> Lascia una Recensione al Venditore
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="bg-surface rounded-md border border-outline-variant/15 text-center p-3 h-full flex flex-col justify-center">
+                        <span class="text-xs text-on-surface-variant font-label uppercase">Pagato</span>
+                        <span class="font-bold text-primary-container text-xl">{{ asta.prezzo_corrente|floatformat:2 }} €</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="bg-surface-container-lowest p-6 rounded-xl text-center border border-outline-variant/15">
+                    <p class="text-on-surface-variant font-medium text-sm">Non hai ancora vinto nessuna asta.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
 
-        <br>
-        <a href="{% url 'elimina_asta' asta.pk %}" style="color: red; font-weight: bold; font-size: 0.9em;">[Ritira
-            Asta]</a>
-    </li>
-    {% empty %}
-    <p>Non hai nessuna asta attiva al momento. <a href="{% url 'asta-nuova' %}">Crea la tua prima asta!</a></p>
-    {% endfor %}
-</ul>
-
-<hr style="margin: 30px 0;">
-
-<h3>Aste Vinte (I tuoi Acquisti)</h3>
-<ul>
-    {% for asta in aste_vinte %}
-    <li style="margin-bottom: 15px;">
-        <strong><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></strong>
-        <br>- Terminata il: {{ asta.data_scadenza }}
-        <br>- Venditore: <a href="{% url 'profilo_venditore' asta.creatore.pk %}">{{ asta.creatore.username }}</a>
-
-        <br>
-        - <strong>Ti sei aggiudicato l'oggetto per:</strong> <span style="font-size: 1.1em; color: darkorange;">{{ asta.prezzo_corrente|floatformat:2 }} €</span>
-        <br>
-        {% if not asta.recensione %}
-        <a href="{% url 'crea_recensione' asta.pk %}"
-            style="display:inline-block; margin-top:5px; background-color: #28a745; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 0.9em; font-weight: bold;">[Lascia
-            una Recensione]</a>
-        {% else %}
-        <span style="display:inline-block; margin-top:5px; font-size:0.9em; color: #888;">(Hai già recensito questo
-            acquisto)</span>
-        {% endif %}
-    </li>
-    {% empty %}
-    <p>Non hai ancora vinto nessuna asta.</p>
-    {% endfor %}
-</ul>
-
-<hr style="margin: 30px 0;">
-
-<h3>Aste Concluse</h3>
-<ul>
-    {% for asta in aste_finite_utente %}
-    <li style="margin-bottom: 15px; color: #555;">
-        <strong><a href="{% url 'dettaglio_asta' asta.pk %}" style="color: #666;">{{ asta.titolo }}</a></strong>
-        (Chiusa)
-        <br>- Scaduta il: {{ asta.data_scadenza }}
-
-        <br>
-        {% if asta.vincitore_username %}
-        - <strong>Vincitore:</strong> {{ asta.vincitore_username }} a {{ asta.prezzo_corrente|floatformat:2 }} €
-        {% else %}
-        - <em>Terminata senza nessuna offerta.</em>
-        {% endif %}
-    </li>
-    {% empty %}
-    <p>Non hai ancora nessuna asta conclusa nel tuo storico.</p>
-    {% endfor %}
-</ul>
-
-<hr style="margin: 30px 0;">
-
-
+        <!-- Closed Auctions (Right - narrower) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            <div>
+                <h2 class="text-2xl font-headline font-bold text-on-surface border-b-2 border-surface-container-high pb-4">Tue Aste Concluse (Vendite)</h2>
+            </div>
+            <div class="flex flex-col gap-4">
+                {% for asta in aste_finite_utente %}
+                <div class="bg-surface-container-lowest p-4 rounded-xl flex items-center justify-between border border-outline-variant/15 group shadow-sm">
+                    <div class="flex flex-col">
+                        <span class="font-headline font-medium text-on-surface group-hover:text-primary-container transition-colors">
+                            <a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo|truncatechars:25 }}</a>
+                        </span>
+                        
+                        {% if asta.vincitore_username %}
+                        <span class="text-xs font-body text-on-surface-variant mt-1">
+                            Aggiudicato a: <strong>{{ asta.vincitore_username }}</strong>
+                        </span>
+                        {% else %}
+                        <span class="text-xs font-body text-on-surface-variant mt-1">Invenduto / Ritirato</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="text-right">
+                        {% if asta.vincitore_username %}
+                        <span class="font-headline font-bold text-on-surface block">{{ asta.prezzo_corrente|floatformat:2 }} €</span>
+                        <span class="text-[10px] text-tertiary-container font-semibold uppercase bg-tertiary-container/10 px-1.5 py-0.5 rounded">Venduto</span>
+                        {% else %}
+                        <span class="font-headline font-bold text-surface-variant block">{{ asta.prezzo_corrente|floatformat:2 }} €</span>
+                        <span class="text-[10px] text-on-surface-variant uppercase bg-surface-variant/20 px-1.5 py-0.5 rounded">Chiusa</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="bg-surface-container-lowest p-6 rounded-xl text-center border border-outline-variant/15">
+                    <p class="text-on-surface-variant font-medium text-sm">Non hai ancora aste concluse.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        
+    </div>
+</div>
 {% endblock %}
