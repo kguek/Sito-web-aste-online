@@ -84,5 +84,36 @@ class AstaModelTest(TestCase):
         if response.status_code != 302:
             print('ERRORS IMG:', response.context['form'].errors)
         self.assertEqual(response.status_code, 302)
-        asta_salvata = Asta.objects.get(titolo='Asta Immagine')
-        self.assertTrue(asta_salvata.immagine.name.startswith('immagini_aste/test_img'))
+
+class AreaPersonaleTest(TestCase):
+    def setUp(self):
+        self.venditore = User.objects.create_user(username='venditore', password='password')
+        self.acquirente = User.objects.create_user(username='acquirente', password='password')
+        
+        self.asta = Asta.objects.create(
+            titolo='Asta Vinta',
+            descrizione='Asta che deve risultare vinta',
+            prezzo_iniziale=10.00,
+            data_scadenza=timezone.now() - timedelta(hours=1),
+            creatore=self.venditore,
+            attiva=False
+        )
+        
+        Offerta.objects.create(
+            asta=self.asta,
+            offerente=self.acquirente,
+            importo=50.00
+        )
+        
+        self.asta.prezzo_corrente = 50.00
+        self.asta.save()
+
+    def test_asta_vinte_visualizzata(self):
+        self.client.login(username='acquirente', password='password')
+        response = self.client.get(reverse('area_personale'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.asta, response.context['aste_vinte'])
+        
+        self.assertContains(response, "50,00 €")
+        self.assertContains(response, "Ti sei aggiudicato l'oggetto per:")

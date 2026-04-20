@@ -12,7 +12,8 @@
         <nav>
             <a href="/">Home</a>
             {% if request.user.is_authenticated %}
-            Benvenuto, <strong>{{request.user.username}}</strong>, <a href="{% url 'asta-nuova' %}"> Inserisci Asta</a>|
+            <p>Benvenuto <strong>{{request.user.username}}</strong>,</p>
+            <a href="{% url 'asta-nuova' %}"> Inserisci Asta</a>|
             <a href="{% url 'area_personale' %}">Area Personale</a>|
             <a href="{% url 'inbox' %}">Messaggi</a>|
             <a href="{% url 'aste_preferite' %}">Wishlist</a>

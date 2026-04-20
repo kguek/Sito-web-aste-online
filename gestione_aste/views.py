@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg, Q
+from django.db.models import Avg, Q, Subquery, OuterRef
 from django import forms
 
 
@@ -182,7 +182,14 @@ class AreaPersonaleView(LoginRequiredMixin,ListView):
      context_object_name='aste_attive_utente'
 
      def get_queryset(self):
-          return Asta.objects.filter(creatore=self.request.user, attiva=True, data_scadenza__gte=timezone.now()).order_by('-data_scadenza')
+          latest_bidder_username = Offerta.objects.filter(
+               asta=OuterRef('pk')).order_by('-data_offerta').values('offerente__username')[:1]
+
+          return Asta.objects.filter(
+               creatore=self.request.user, 
+               attiva=True, 
+               data_scadenza__gte=timezone.now()).annotate(
+               ultimo_offerente_username=Subquery(latest_bidder_username)).order_by('-data_scadenza')
 
      def get_context_data(self, **kwargs):
           """
@@ -195,21 +202,22 @@ class AreaPersonaleView(LoginRequiredMixin,ListView):
           context['media_voto']=round(media_voto, 1) if media_voto else 0
           context['numero_recensioni']=Recensione.objects.filter(destinatario=self.request.user).count()
           
+          latest_bidder_username = Offerta.objects.filter(
+               asta=OuterRef('pk')).order_by('-data_offerta').values('offerente__username')[:1]
+
           aste_finite_utente = Asta.objects.filter(creatore=self.request.user).filter(
-               Q(attiva=False) | Q(data_scadenza__lt=timezone.now())
-          ).order_by('-data_scadenza')
+               Q(attiva=False) | Q(data_scadenza__lt=timezone.now())).annotate(
+               vincitore_username=Subquery(latest_bidder_username)).order_by('-data_scadenza')
+          
           context['aste_finite_utente'] = aste_finite_utente
           
-          aste_vinte = []
-          tutte_aste_concluse = Asta.objects.filter(
-               Q(data_scadenza__lt=timezone.now()) | Q(attiva=False)
-          ).order_by('-data_scadenza')
-          for a in tutte_aste_concluse:
-               ultima = a.offerte.order_by('-data_offerta').first()
-               if ultima and ultima.offerente == self.request.user:
-                    aste_vinte.append(a)
-          
-          context['aste_vinte'] = aste_vinte
+          latest_offer_user_id = Offerta.objects.filter(
+               asta=OuterRef('pk')).order_by('-data_offerta').values('offerente')[:1]
+
+          context['aste_vinte'] = Asta.objects.filter(
+               Q(data_scadenza__lt=timezone.now()) | Q(attiva=False)).annotate(
+               ultimo_offerente_id=Subquery(latest_offer_user_id),
+               ultimo_offerente_username=Subquery(latest_bidder_username)).filter(ultimo_offerente_id=self.request.user.id).order_by('-data_scadenza')
           return context
 
 class AstaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

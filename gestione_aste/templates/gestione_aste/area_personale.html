@@ -2,28 +2,24 @@
 
 {% block content %}
 <h2>La Mia Area Personale</h2>
-<p>Recensioni ricevute: {{numero_recensioni}}</p>
-<p>Media voto: {{media_voto}}</p>
+<p>Recensioni ricevute: {{numero_recensioni}} - {{media_voto}}</p>
 
 <hr style="margin: 30px 0;">
 
-<h3>Aste In Corso</h3>
+<h3>Aste in vendita</h3>
 <ul>
     {% for asta in aste_attive_utente %}
     <li style="margin-bottom: 15px;">
         <strong><a href="{% url 'dettaglio_asta' asta.pk %}">{{ asta.titolo }}</a></strong>
-        <br>- Prezzo attuale: {{ asta.prezzo_corrente }} €
+        <br>- Prezzo attuale: {{ asta.prezzo_corrente|floatformat:2 }} €
         <br>- Scadenza: {{ asta.data_scadenza }}
 
         <br>
-        {% with ultima_offerta=asta.offerte.all|dictsortreversed:"data_offerta"|first %}
-        {% if ultima_offerta %}
-        - <span style="color: green;">Offerta massima attuale:</span> {{ ultima_offerta.offerente.username }} ({{
-        ultima_offerta.importo }} €)
+        {% if asta.ultimo_offerente_username %}
+        - <span style="color: green;">Offerta massima attuale:</span> {{ asta.ultimo_offerente_username }} ({{ asta.prezzo_corrente|floatformat:2 }} €)
         {% else %}
         - <span style="color: gray;">Nessuna offerta ricevuta.</span>
         {% endif %}
-        {% endwith %}
 
         <br>
         <a href="{% url 'elimina_asta' asta.pk %}" style="color: red; font-weight: bold; font-size: 0.9em;">[Ritira
@@ -31,30 +27,6 @@
     </li>
     {% empty %}
     <p>Non hai nessuna asta attiva al momento. <a href="{% url 'asta-nuova' %}">Crea la tua prima asta!</a></p>
-    {% endfor %}
-</ul>
-
-<hr style="margin: 30px 0;">
-
-<h3>Aste Concluse</h3>
-<ul>
-    {% for asta in aste_finite_utente %}
-    <li style="margin-bottom: 15px; color: #555;">
-        <strong><a href="{% url 'dettaglio_asta' asta.pk %}" style="color: #666;">{{ asta.titolo }}</a></strong>
-        (Chiusa)
-        <br>- Scaduta il: {{ asta.data_scadenza }}
-
-        <br>
-        {% with ultima_offerta=asta.offerte.all|dictsortreversed:"data_offerta"|first %}
-        {% if ultima_offerta %}
-        - <strong>Vincitore:</strong> {{ ultima_offerta.offerente.username }} a {{ ultima_offerta.importo }} €
-        {% else %}
-        - <em>Terminata senza nessuna offerta.</em>
-        {% endif %}
-        {% endwith %}
-    </li>
-    {% empty %}
-    <p>Non hai ancora nessuna asta conclusa nel tuo storico.</p>
     {% endfor %}
 </ul>
 
@@ -69,14 +41,8 @@
         <br>- Venditore: <a href="{% url 'profilo_venditore' asta.creatore.pk %}">{{ asta.creatore.username }}</a>
 
         <br>
-        {% with ultima_offerta=asta.offerte.all|dictsortreversed:"data_offerta"|first %}
-        - <strong>Ti sei aggiudicato l'oggetto per:</strong> <span style="font-size: 1.1em; color: darkorange;">{{
-            ultima_offerta.importo }} €</span>
-        {% endwith %}
+        - <strong>Ti sei aggiudicato l'oggetto per:</strong> <span style="font-size: 1.1em; color: darkorange;">{{ asta.prezzo_corrente|floatformat:2 }} €</span>
         <br>
-        {% if hasattr %}
-        <!-- fallback se per caso -->
-        {% endif %}
         {% if not asta.recensione %}
         <a href="{% url 'crea_recensione' asta.pk %}"
             style="display:inline-block; margin-top:5px; background-color: #28a745; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 0.9em; font-weight: bold;">[Lascia
@@ -90,5 +56,30 @@
     <p>Non hai ancora vinto nessuna asta.</p>
     {% endfor %}
 </ul>
+
+<hr style="margin: 30px 0;">
+
+<h3>Aste Concluse</h3>
+<ul>
+    {% for asta in aste_finite_utente %}
+    <li style="margin-bottom: 15px; color: #555;">
+        <strong><a href="{% url 'dettaglio_asta' asta.pk %}" style="color: #666;">{{ asta.titolo }}</a></strong>
+        (Chiusa)
+        <br>- Scaduta il: {{ asta.data_scadenza }}
+
+        <br>
+        {% if asta.vincitore_username %}
+        - <strong>Vincitore:</strong> {{ asta.vincitore_username }} a {{ asta.prezzo_corrente|floatformat:2 }} €
+        {% else %}
+        - <em>Terminata senza nessuna offerta.</em>
+        {% endif %}
+    </li>
+    {% empty %}
+    <p>Non hai ancora nessuna asta conclusa nel tuo storico.</p>
+    {% endfor %}
+</ul>
+
+<hr style="margin: 30px 0;">
+
 
 {% endblock %}
