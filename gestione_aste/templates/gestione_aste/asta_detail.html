@@ -29,8 +29,8 @@
             {% if request.user.is_authenticated and request.user.id != object.creatore.id %}
             <form action="{% url 'toggle_preferito' object.pk %}" method="post" class="absolute top-6 right-6">
                 {% csrf_token %}
-                <button type="submit" class="w-12 h-12 bg-surface-container-lowest/80 backdrop-blur-md rounded-full flex items-center justify-center transition-colors shadow-sm border border-outline-variant/15 {% if request.user in object.preferiti.all %}text-primary-container{% else %}text-on-surface hover:text-primary-container{% endif %}">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {% if request.user in object.preferiti.all %}1{% else %}0{% endif %};">favorite</span>
+                <button type="submit" class="w-12 h-12 bg-surface-container-lowest/80 backdrop-blur-md rounded-full flex items-center justify-center transition-colors shadow-sm border border-outline-variant/15 {% if request.user in object.preferiti.all %}text-primary-container fill-[1]{% else %}text-on-surface hover:text-primary-container fill-[0]{% endif %}">
+                    <span class="material-symbols-outlined" {% if request.user in object.preferiti.all %}style="font-variation-settings: 'FILL' 1;"{% endif %}>favorite</span>
                 </button>
             </form>
             {% endif %}
@@ -85,11 +85,25 @@
             <div class="mb-8">
                 <span class="font-label text-xs text-on-surface-variant uppercase tracking-wider mb-2 block">Prezzo Attuale</span>
                 <div class="font-headline text-5xl font-extrabold text-primary-container mb-2">
-                    <span id="prezzo-live-valore">{{ object.prezzo_iniziale }}</span> €
+                    <span id="prezzo-live-valore">{{ object.prezzo_corrente }}</span> €
                 </div>
                 <div class="bg-surface-bright inline-flex items-center gap-2 px-3 py-1.5 rounded-md" id="offerta-migliore-container">
                     <span class="material-symbols-outlined text-sm text-tertiary-container" style="font-variation-settings: 'FILL' 1;">person</span>
-                    <span class="font-body text-sm font-medium text-tertiary-container">Miglior offerente: <span class="font-bold" id="offerente-live">...</span></span>
+                    <span class="font-body text-sm font-medium text-tertiary-container flex items-center gap-1">
+                        {% if is_conclusa %}Vincitore:{% else %}Miglior offerente:{% endif %} 
+                        <span class="font-bold inline-flex items-center gap-1" id="offerente-live">
+                            {% if ultima_offerta %}
+                                <a href="{% url 'profilo_venditore' ultima_offerta.offerente.id %}" class="hover:underline">{{ ultima_offerta.offerente.username }}</a>
+                                {% if request.user.is_authenticated and request.user == object.creatore %}
+                                <a href="{% url 'chat' object.id ultima_offerta.offerente.id %}" class="text-tertiary-container hover:text-primary transition-colors flex items-center" title="Contatta">
+                                    <span class="material-symbols-outlined text-[14px]">chat</span>
+                                </a>
+                                {% endif %}
+                            {% else %}
+                                Nessuna offerta
+                            {% endif %}
+                        </span>
+                    </span>
                 </div>
             </div>
             
@@ -99,6 +113,22 @@
                 <p class="font-headline font-bold text-on-surface">Questa asta è terminata.</p>
                 <p class="font-body text-sm text-on-surface-variant mt-2">Non è più possibile fare offerte.</p>
             </div>
+            
+            {% if request.user.is_authenticated and request.user == object.creatore %}
+            <div class="bg-surface-container-high rounded-xl p-6 mb-6">
+                <form action="{% url 'rilancia_asta' object.pk %}" method="post">
+                    {% csrf_token %}
+                    <label class="font-label text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-3">Rilancia l'asta</label>
+                    <div class="mb-4">
+                        <label class="text-xs text-on-surface-variant mb-1 block">Durata (giorni)</label>
+                        <input name="durata" type="number" min="1" value="7" class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-lg py-3 px-4 font-body text-on-background focus:border-outline focus:ring-0 transition-colors" required />
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline text-lg font-bold py-4 rounded-md shadow-sm hover:opacity-90 transition-opacity">
+                        Conferma Rilancio
+                    </button>
+                </form>
+            </div>
+            {% endif %}
             {% elif request.user.is_authenticated and request.user.id != object.creatore.id %}
             <div class="bg-surface-container-high rounded-xl p-6 mb-6">
                 <form action="{% url 'fai_offerta' object.pk %}" method="post">
@@ -110,7 +140,9 @@
                     </div>
                     {% if form_offerta.importo.errors %}
                     <div class="text-error text-xs font-semibold mb-3">
-                        {{ form_offerta.importo.errors }}
+                        {% for error in form_offerta.importo.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
                     </div>
                     {% endif %}
                     {% if form_offerta.non_field_errors %}
@@ -121,7 +153,7 @@
                     <button type="submit" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline text-lg font-bold py-4 rounded-md shadow-sm hover:opacity-90 transition-opacity">
                         Piazza Offerta
                     </button>
-                    <p class="text-center font-label text-xs text-on-surface-variant mt-3">Offerta minima: <span id="minimo-richiesto">...</span> €</p>
+                    <p class="text-center font-label text-xs text-on-surface-variant mt-3">Offerta minima: <span id="minimo-richiesto">{{ minimo_richiesto }}</span> €</p>
                 </form>
             </div>
             {% elif request.user.id == object.creatore.id %}
@@ -140,7 +172,20 @@
         <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_24px_48px_-12px_rgba(26,28,28,0.06)] border border-outline-variant/15">
             <h3 class="font-headline text-xl font-bold text-on-background mb-6">Storico Offerte</h3>
             <div class="flex flex-col gap-0" id="lista-offerte">
-                <div class="text-center py-4 text-on-surface-variant">Caricamento storico...</div>
+                {% for off in storico_offerte %}
+                <div class="flex justify-between items-center py-4 border-b border-outline-variant/10 {% if forloop.counter|divisibleby:2 %}bg-surface{% endif %}">
+                    <div class="flex items-center gap-3 pl-2">
+                        <div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant font-bold text-xs uppercase">{{ off.offerente.username|slice:":2" }}</div>
+                        <div class="flex flex-col">
+                            <span class="font-body text-sm font-semibold text-on-background">{{ off.offerente.username }}</span>
+                            <span class="font-label text-xs text-on-surface-variant">{{ off.data_offerta|date:"d/m/Y H:i" }}</span>
+                        </div>
+                    </div>
+                    <span class="font-headline text-lg font-bold text-on-background pr-2">{{ off.importo|floatformat:2 }} €</span>
+                </div>
+                {% empty %}
+                <div class="text-center py-4 text-on-surface-variant text-sm font-medium">Nessuna offerta ancora. Sii il primo!</div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -159,7 +204,25 @@
                 if (prezzoValoreEl) prezzoValoreEl.innerText = parseFloat(risposta.importo).toFixed(2);
                 
                 const offerenteLiveEl = document.getElementById('offerente-live');
-                if (offerenteLiveEl) offerenteLiveEl.innerText = risposta.offerente;
+                if (offerenteLiveEl) {
+                    if (risposta.offerente_id) {
+                        const profileUrl = "{% url 'profilo_venditore' 0 %}".replace('/0/', '/' + risposta.offerente_id + '/');
+                        let htmlContent = `<a href="${profileUrl}" class="hover:underline">${risposta.offerente}</a>`;
+                        
+                        {% if request.user.is_authenticated and request.user == object.creatore %}
+                            const chatUrl = "{% url 'chat' object.id 0 %}".replace('/0/', '/' + risposta.offerente_id + '/');
+                            htmlContent += `
+                                <a href="${chatUrl}" class="text-tertiary-container hover:text-primary transition-colors flex items-center" title="Contatta">
+                                    <span class="material-symbols-outlined text-[14px]">chat</span>
+                                </a>
+                            `;
+                        {% endif %}
+                        
+                        offerenteLiveEl.innerHTML = htmlContent;
+                    } else {
+                        offerenteLiveEl.innerText = 'Nessuna offerta';
+                    }
+                }
 
                 let listaHTML = "";
                 if (risposta.storico.length > 0) {
@@ -198,4 +261,5 @@
     // Prima chiamata immediata
     aggiornaPrezzo();
 </script>
+
 {% endblock %}

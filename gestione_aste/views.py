@@ -1,16 +1,15 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy,reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
-
+from datetime import timedelta
 User = get_user_model()
 from .models import *
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg, Q, Subquery, OuterRef
 from django import forms
@@ -94,13 +93,12 @@ class AstaListView(ListView):
     model = Asta
     template_name = 'gestione_aste/asta_list.html'
     context_object_name = 'aste'
-    
     def get_queryset(self):
        """
        Filtra il QuerySet di base in modo da esporre solo le aste non scadute e non ritirate.
        Applica in coda la ricerca keyword (q) e il filtro (categoria), se forniti.
        """
-       queryset = Asta.objects.filter(attiva=True, data_scadenza__gte=timezone.now()).order_by('-data_scadenza')
+       queryset = Asta.objects.filter(attiva=True, data_scadenza__gte=timezone.now()).order_by('data_scadenza')
 
        query_testo = self.request.GET.get('q')
        query_categoria = self.request.GET.get('categoria')
@@ -161,23 +159,33 @@ class AstaDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         """
-        Passa al template un form vuoto per permettere agli utenti
-        di scommettere, e una variabile per indicare se l'asta
-        è scaduta, disabilitando eventuali form.
+        Popola il contesto con il form per le offerte e calcola i dati
+        necessari alla visualizzazione live (prezzo, offerta minima, stato).
         """
-        context=super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         from django import forms
-        from django.utils import timezone
-        
+
         class FormVuoto(forms.ModelForm):
             class Meta:
-                model=Offerta
-                fields=['importo']
-        context['form_offerta']=FormVuoto()
+                model = Offerta
+                fields = ['importo']
+        
+        context['form_offerta'] = FormVuoto()
         
         asta = self.object
         context['is_conclusa'] = not asta.attiva or asta.data_scadenza < timezone.now()
         
+        offerte_ordinate = asta.offerte.order_by('-importo')
+        context['storico_offerte'] = offerte_ordinate[:10]
+        
+        ultima_offerta = offerte_ordinate.first()
+        context['ultima_offerta'] = ultima_offerta
+        
+        if ultima_offerta:
+            context['minimo_richiesto'] = ultima_offerta.importo + 1
+        else:
+            context['minimo_richiesto'] = asta.prezzo_iniziale
+            
         return context
 
 class AreaPersonaleView(LoginRequiredMixin,ListView):
@@ -192,12 +200,15 @@ class AreaPersonaleView(LoginRequiredMixin,ListView):
      def get_queryset(self):
           latest_bidder_username = Offerta.objects.filter(
                asta=OuterRef('pk')).order_by('-data_offerta').values('offerente__username')[:1]
+          latest_bidder_id = Offerta.objects.filter(
+               asta=OuterRef('pk')).order_by('-data_offerta').values('offerente_id')[:1]
 
           return Asta.objects.filter(
                creatore=self.request.user, 
                attiva=True, 
                data_scadenza__gte=timezone.now()).annotate(
-               ultimo_offerente_username=Subquery(latest_bidder_username)).order_by('-data_scadenza')
+               ultimo_offerente_username=Subquery(latest_bidder_username),
+               ultimo_offerente_id=Subquery(latest_bidder_id)).order_by('-data_scadenza')
 
      def get_context_data(self, **kwargs):
           """
@@ -212,10 +223,13 @@ class AreaPersonaleView(LoginRequiredMixin,ListView):
           
           latest_bidder_username = Offerta.objects.filter(
                asta=OuterRef('pk')).order_by('-data_offerta').values('offerente__username')[:1]
+          latest_bidder_id = Offerta.objects.filter(
+               asta=OuterRef('pk')).order_by('-data_offerta').values('offerente_id')[:1]
 
           aste_finite_utente = Asta.objects.filter(creatore=self.request.user).filter(
                Q(attiva=False) | Q(data_scadenza__lt=timezone.now())).annotate(
-               vincitore_username=Subquery(latest_bidder_username)).order_by('-data_scadenza')
+               vincitore_username=Subquery(latest_bidder_username),
+               vincitore_id=Subquery(latest_bidder_id)).order_by('-data_scadenza')
           
           context['aste_finite_utente'] = aste_finite_utente
           
@@ -245,14 +259,63 @@ class AstaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
           asta=self.get_object()
           return self.request.user==asta.creatore
 
+@login_required
+def rilancia_asta(request, pk):
+     """
+     Permette al creatore dell'asta di riattivarla impostando una nuova durata.
+     """
+     asta = get_object_or_404(Asta, pk=pk)
+     
+     if request.user != asta.creatore:
+          return redirect('dettaglio_asta', pk=pk)
+          
+     if request.method == 'POST':
+          durata_giorni = request.POST.get('durata', 7)
+          try:
+               durata_giorni = int(durata_giorni)
+          except ValueError:
+               durata_giorni = 7
+               
+          asta.attiva = True
+          asta.data_scadenza = timezone.now() + timedelta(days=durata_giorni)
+          asta.save()
+          return redirect('dettaglio_asta', pk=asta.pk)
+          
+     return redirect('dettaglio_asta', pk=asta.pk)
+
 class OffertaCreateView(LoginRequiredMixin, CreateView):
      """
      Processa la sottoscrizione di una nuova offerta ed esegue i controlli
      di coerenza economica prima di registrare il record.
      """
      model = Offerta
-     fields=['importo']
-     template_name='gestione_aste/asta_detail.html'
+     fields = ['importo']
+     template_name = 'gestione_aste/asta_detail.html'
+
+     def get_context_data(self, **kwargs):
+          """
+          Garantisce che il template detail abbia tutto il contesto necessario
+          anche quando visualizzato tramite questa vista (es. errori di validazione).
+          """
+          context = super().get_context_data(**kwargs)
+          asta = get_object_or_404(Asta, pk=self.kwargs['pk'])
+          
+          context['object'] = asta
+          context['form_offerta'] = context.get('form')
+          context['is_conclusa'] = not asta.attiva or asta.data_scadenza < timezone.now()
+          
+          offerte_ordinate = asta.offerte.order_by('-importo')
+          context['storico_offerte'] = offerte_ordinate[:10]
+          
+          ultima_offerta = offerte_ordinate.first()
+          context['ultima_offerta'] = ultima_offerta
+          
+          if ultima_offerta:
+               context['minimo_richiesto'] = ultima_offerta.importo + 1
+          else:
+               context['minimo_richiesto'] = asta.prezzo_iniziale
+               
+          return context
 
      def form_valid(self, form):
           """
@@ -309,6 +372,7 @@ def api_max_offerta(request, pk):
           dati={
                'importo': str(offerta_massima.importo),
                'offerente': offerta_massima.offerente.username,
+               'offerente_id': offerta_massima.offerente.id,
                'minimo_richiesto': str(offerta_massima.importo + 1),
                'storico':storico,
           }
@@ -316,6 +380,7 @@ def api_max_offerta(request, pk):
           dati={
                'importo': str(asta.prezzo_iniziale),
                'offerente': 'Nessuna offerta',
+               'offerente_id': None,
                'minimo_richiesto': str(asta.prezzo_iniziale),
                'storico': storico,
           }

@@ -39,6 +39,28 @@
         </div>
     </section>
 
+    <section class="mb-12">
+        <div class="bg-surface-container-low rounded-xl p-8 flex flex-col sm:flex-row justify-between items-center relative overflow-hidden transition-all hover:shadow-[0_24px_48px_rgba(26,28,28,0.06)] border border-outline-variant/15">
+            <!-- Decorative background element -->
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="flex items-center gap-6 mb-4 sm:mb-0 z-10">
+                <div class="w-16 h-16 bg-primary-container/20 rounded-full flex items-center justify-center text-primary-container">
+                    <span class="material-symbols-outlined text-3xl">chat</span>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-headline font-bold text-on-surface">Messaggi e Chat</h2>
+                    <p class="text-sm font-body text-on-surface-variant mt-1">Gestisci le conversazioni con acquirenti e venditori.</p>
+                </div>
+            </div>
+            
+            <a href="{% url 'inbox' %}" class="z-10 flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-lg font-headline font-semibold hover:bg-primary-container hover:shadow-md transition-all">
+                Vedi Messaggi
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+        </div>
+    </section>
+
     <!-- Your Auctions for Sale (Live) -->
     <section>
         <div class="flex justify-between items-end mb-6">
@@ -68,8 +90,11 @@
                     </div>
                     
                     {% if asta.ultimo_offerente_username %}
-                    <div class="absolute top-4 right-4 bg-surface-container-highest/90 backdrop-blur-md px-2 py-1 rounded-md text-xs font-bold shadow-sm">
-                        Miglior: {{ asta.ultimo_offerente_username }}
+                    <div class="absolute top-4 right-4 bg-surface-container-highest/90 backdrop-blur-md px-3 py-1.5 rounded-md text-xs font-bold shadow-sm flex items-center gap-2">
+                        <span>Miglior offerente: <a href="{% url 'profilo_venditore' asta.ultimo_offerente_id %}" class="hover:underline text-primary-container">{{ asta.ultimo_offerente_username }}</a></span>
+                        <a href="{% url 'chat' asta.id asta.ultimo_offerente_id %}" class="text-primary-container hover:text-primary transition-colors flex items-center" title="Contatta l'offerente" onclick="event.stopPropagation();">
+                            <span class="material-symbols-outlined text-[16px]">chat</span>
+                        </a>
                     </div>
                     {% endif %}
                 </div>
@@ -168,8 +193,11 @@
                         </span>
                         
                         {% if asta.vincitore_username %}
-                        <span class="text-xs font-body text-on-surface-variant mt-1">
-                            Aggiudicato a: <strong>{{ asta.vincitore_username }}</strong>
+                        <span class="text-xs font-body text-on-surface-variant mt-1 flex items-center gap-1">
+                            Aggiudicato a: <a href="{% url 'profilo_venditore' asta.vincitore_id %}" class="font-bold hover:underline text-primary-container">{{ asta.vincitore_username }}</a>
+                            <a href="{% url 'chat' asta.id asta.vincitore_id %}" class="text-primary-container hover:text-primary transition-colors flex items-center" title="Contatta il vincitore">
+                                <span class="material-symbols-outlined text-[14px]">chat</span>
+                            </a>
                         </span>
                         {% else %}
                         <span class="text-xs font-body text-on-surface-variant mt-1">Invenduto / Ritirato</span>

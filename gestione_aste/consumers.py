@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import Messaggio
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -13,7 +13,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
         """
-        Gestisce la connessione di un nuovo client alla stanza WebSocket.
+        Gestisce la connessioni di un nuovo client alla stanza WebSocket.
         Calcola un nome univoco per la stanza in base agli ID dei partecipanti.
         """
         self.asta_id = self.scope['url_route']['kwargs']['asta_id']
@@ -72,6 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         Recupera le referenze agli oggetti User e Asta per storicizzare il testo.
         """
         from .models import Asta
+        User = get_user_model()
         mittente = User.objects.get(id=mittente_id)
         destinatario = User.objects.get(id=destinatario_id)
         asta = Asta.objects.get(id=asta_id)
